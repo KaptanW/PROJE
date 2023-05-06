@@ -277,6 +277,13 @@ namespace ERP_PROJESİ
             personelListele();
             
         }
+
+        private void personelTabControl_Enter(object sender, EventArgs e)
+        {
+            AnaTabControl.ContextMenuStrip = contextMenuStrip1;
+            selectedPage = "personeller";
+            personelListele();
+        }
         #endregion
         #region CARİLER
         private void cariler_Enter(object sender, EventArgs e)
@@ -736,8 +743,8 @@ namespace ERP_PROJESİ
                 personeldata.Columns[3].HeaderText = "Çalışanın Ünvanı";
                 personeldata.Columns[4].HeaderText = "İşe Giriş Tarihi";
                 personeldata.Columns[5].HeaderText = "Telefon";
-                personeldata.Columns[0].Visible = false;
-                personeldata.Columns[6].Visible = false;
+               // personeldata.Columns[0].Visible = false;
+                //personeldata.Columns[6].Visible = false;
 
             arama = null;
             
@@ -824,7 +831,6 @@ namespace ERP_PROJESİ
             ekleekran.ShowDialog();
         }
         #endregion
-
         #region yarı mamul double click
         private void ymamuldata_DoubleClick(object sender, EventArgs e)
         {
@@ -878,6 +884,26 @@ namespace ERP_PROJESİ
 
         }
         #endregion
+        #endregion
+        #region Personeller
+
+        private void personeldata_DoubleClick(object sender, EventArgs e)
+        {
+            selectedid = int.Parse(personeldata.CurrentRow.Cells[0].Value.ToString());
+            EklemeEkranı ekleekran = new EklemeEkranı(this);
+            ekleekran.selectedPage = selectedPage;
+            ekleekran.selectedid = selectedid;
+            ekleekran.Show();
+            ekleekran.textBoxes[0].Text = personeldata.CurrentRow.Cells[1].Value.ToString();
+            ekleekran.textBoxes[1].Text = personeldata.CurrentRow.Cells[2].Value.ToString();
+            ekleekran.DateTimePicks[0].Value = DateTime.Parse(personeldata.CurrentRow.Cells[4].Value.ToString());
+            ekleekran.textBoxes[2].Text = personeldata.CurrentRow.Cells[5].Value.ToString();
+            ekleekran.ComboBoxes[0].Text = personeldata.CurrentRow.Cells[3].Value.ToString();
+
+
+            ekleekran.Visible = false;
+            ekleekran.ShowDialog();
+        }
         #endregion
 
 
@@ -969,7 +995,22 @@ namespace ERP_PROJESİ
         #endregion
 
         #endregion
+        #region personeller
+        private void personeldata_Click(object sender, EventArgs e)
+        {
+            selectedid = int.Parse(personeldata.CurrentRow.Cells[0].Value.ToString());
+            MessageBox.Show(selectedid.ToString());
+        }
 
+        public void personelSil()
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@calisanid", selectedid);
+            SqlCon.Execute("personelsil", param, commandType: CommandType.StoredProcedure);
+            SqlCon.Execute("usersil", param, commandType: CommandType.StoredProcedure);
+
+        }
+        #endregion
         #region silme düğmesi
         public void delete_Click(object sender, EventArgs e)
         {
@@ -981,6 +1022,9 @@ namespace ERP_PROJESİ
             {
                 case "kategori":
                     kategorisilme();
+                    break;
+                case "personeller":
+                    personelSil();
                     break;
                 case "ürünler":
                     switch (urunturu)
@@ -1019,5 +1063,7 @@ namespace ERP_PROJESİ
         {
 
         }
+
+
     }
 }

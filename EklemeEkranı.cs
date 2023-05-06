@@ -28,6 +28,7 @@ namespace ERP_PROJESİ
         public List<TextBox> textBoxes = new List<TextBox>();
         public List<ComboBox> ComboBoxes = new List<ComboBox>(); 
         public List<RadioButton> radioButtons = new List<RadioButton>();
+        public List<DateTimePicker> DateTimePicks = new List<DateTimePicker>();    
         public string selectedPage { get; set; }
         string giriskelimesi;
         Ana ana = new Ana();
@@ -312,6 +313,7 @@ namespace ERP_PROJESİ
                     calısanadiTXT.Location = new Point(250, 50);
                     calısanadiTXT.Size = new Size(250, 25);
                     Controls.Add(calısanadiTXT);
+                    textBoxes.Add(calısanadiTXT);
                     Label calısansoyadiLBL = new Label();
                     calısansoyadiLBL.Text = "Soyadı";
                     calısansoyadiLBL.Location = new Point(50, 100);
@@ -321,6 +323,7 @@ namespace ERP_PROJESİ
                     calısansoyadiTXT.Location = new Point(250, 100);
                     calısansoyadiTXT.Size = new Size(250, 25);
                     Controls.Add(calısansoyadiTXT);
+                    textBoxes.Add(calısansoyadiTXT);
                     Label isegirisDateLBL = new Label();
                     isegirisDateLBL.Text = "İşe Giriş Tarihi";
                     isegirisDateLBL.Location = new Point(50, 150);
@@ -329,6 +332,7 @@ namespace ERP_PROJESİ
                     DateTimePicker isegirisDate = new DateTimePicker();
                     isegirisDate.Location = new Point(250, 150);
                     isegirisDate.Size = new Size(250, 50);
+                    DateTimePicks.Add(isegirisDate);
                     Controls.Add(isegirisDate);
                     Label telefonLBL = new Label();
                     telefonLBL.Text = "Telefon";
@@ -339,6 +343,7 @@ namespace ERP_PROJESİ
                     telefonTXT.Location = new Point(250, 200);
                     telefonTXT.Size = new Size(250, 25);
                     Controls.Add(telefonTXT);
+                    textBoxes.Add(telefonTXT);
                     Label ünvanLBL = new Label();
                     ünvanLBL.Text = "Ünvanı";
                     ünvanLBL.Location = new Point(50, 250);
@@ -348,20 +353,8 @@ namespace ERP_PROJESİ
                     ünvanID.Location = new Point(250, 250);
                     ünvanID.Size = new Size(250, 25);
                     Controls.Add(ünvanID);
-                    Label kullanabildigimakinalarLBL = new Label();
-                    kullanabildigimakinalarLBL.Text = "Kullanabildigi Makinalar";
-                    kullanabildigimakinalarLBL.Location = new Point(50, 300);
-                    kullanabildigimakinalarLBL.Size = new Size(200, 50);
-                    Controls.Add(kullanabildigimakinalarLBL);
-                    ComboBox kullanabildigimakinalarID = new ComboBox();
-                    kullanabildigimakinalarID.Location = new Point(250, 300);
-                    kullanabildigimakinalarID.Size = new Size(250, 25);
-                    Controls.Add(kullanabildigimakinalarID);
-                    Panel resimkoy = new Panel();
-                    resimkoy.Location = new Point(300, 350);
-                    resimkoy.Size = new Size(200, 250);
-                    resimkoy.BackColor = Color.Black;
-                    Controls.Add(resimkoy);
+                    ComboBoxes.Add(ünvanID);
+                    personelkombobox();
                     break;
                 #endregion
                 case "hakedis":
@@ -817,6 +810,8 @@ namespace ERP_PROJESİ
                     kategoriguncelleme();
                     break;
                 default:
+                case "personeller":
+                    personelekleduzenle();
                     break;
             }
             
@@ -869,7 +864,6 @@ namespace ERP_PROJESİ
                 SqlCon.Close();
             }
         }
-        #endregion
         #region kategori
         public void kategoriguncelleme()
         {
@@ -893,9 +887,42 @@ namespace ERP_PROJESİ
         }
         #endregion
         #endregion
+        #region Personeller
+        public void personelekleduzenle()
+        {
+            if (SqlCon.State == ConnectionState.Closed)
+            {
+                SqlCon.Open();
+            }
+            MessageBox.Show(DateTimePicks[0].Value.ToString("yyyy-MM-dd"));
+
+            int indexofsecretcombo = ComboBoxes[0].SelectedIndex;
+            int indexofunvan = int.Parse(gizlicombo.Items[indexofsecretcombo].ToString());
+
+
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@calisanid", selectedid);
+            param.Add("@calisanadi", textBoxes[0].Text);
+            param.Add("@calisansoyadi", textBoxes[1].Text);
+            param.Add("@isegiris", DateTimePicks[0].Value.ToString("yyyy-MM-dd"));
+            param.Add("@telefon", int.Parse(textBoxes[2].Text));
+            param.Add("@unvanID", indexofunvan);
+            param.Add("@sil", "True");
+            SqlCon.Execute("personeleklevedüzenle", param, commandType: CommandType.StoredProcedure);
+
+
+
+            if (SqlCon.State == ConnectionState.Open)
+            {
+                SqlCon.Close();
+            }
+        }
+        #endregion
+        #endregion
 
 
         #region ürünler kategori kombobox
+        //ürünlerdeki kategori için combo box
         public void urunlercombobox()
         {
             if (SqlCon.State == ConnectionState.Closed)
@@ -903,8 +930,9 @@ namespace ERP_PROJESİ
                 SqlCon.Open();
             }
 
-            SqlCommand cmd = new SqlCommand("select * from Urun_Kategorileri", SqlCon);
+            SqlCommand cmd = new SqlCommand("select * from Urun_Kategorileri where sil = 'True'", SqlCon);
             SqlDataReader dr = cmd.ExecuteReader();
+
             while (dr.Read())
             {
                 ComboBoxes[0].Items.Add(dr[1]);
@@ -918,6 +946,30 @@ namespace ERP_PROJESİ
         }
         #endregion
 
+        #region çalışan ünvan
+        //personel ekleme ekranındaki kombo box
+
+        public void personelkombobox()
+        {
+            if (SqlCon.State == ConnectionState.Closed)
+            {
+                SqlCon.Open();
+            }
+
+            SqlCommand cmd = new SqlCommand("select * from Unvan where sil = 'True'", SqlCon);
+            SqlDataReader dr = cmd.ExecuteReader();
+            while (dr.Read())
+            {
+                ComboBoxes[0].Items.Add(dr[1]);
+                gizlicombo.Items.Add(dr[0].ToString());
+            }
+
+            if (SqlCon.State == ConnectionState.Open)
+            {
+                SqlCon.Close();
+            }
+        }
+        #endregion
         private void EklemeEkranı_FormClosed(object sender, FormClosedEventArgs e)
         {
 

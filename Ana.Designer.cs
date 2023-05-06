@@ -115,6 +115,8 @@
             this.güncelle = new System.Windows.Forms.ToolStripMenuItem();
             this.yenile = new System.Windows.Forms.ToolStripMenuItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.satinalmatabsiparis = new System.Windows.Forms.DataGridView();
+            this.satinalmairsaliye = new System.Windows.Forms.DataGridView();
             this.AnaTabControl.SuspendLayout();
             this.AnaSayfa.SuspendLayout();
             this.anaSayfaPaneli.SuspendLayout();
@@ -172,6 +174,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.onteklifdata)).BeginInit();
             this.SatınAlma.SuspendLayout();
             this.urunlerTabControl.SuspendLayout();
+            this.satinalmasiparisleri.SuspendLayout();
+            this.satinalmairsaliyesi.SuspendLayout();
             this.Raporlar.SuspendLayout();
             this.raporlarTabControl.SuspendLayout();
             this.personeller.SuspendLayout();
@@ -182,6 +186,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.carihesapdata)).BeginInit();
             this.panel1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.satinalmatabsiparis)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.satinalmairsaliye)).BeginInit();
             this.SuspendLayout();
             // 
             // AnaTabControl
@@ -962,6 +968,7 @@
             // 
             // satinalmasiparisleri
             // 
+            this.satinalmasiparisleri.Controls.Add(this.satinalmatabsiparis);
             this.satinalmasiparisleri.Location = new System.Drawing.Point(4, 27);
             this.satinalmasiparisleri.Margin = new System.Windows.Forms.Padding(2);
             this.satinalmasiparisleri.Name = "satinalmasiparisleri";
@@ -975,6 +982,7 @@
             // 
             // satinalmairsaliyesi
             // 
+            this.satinalmairsaliyesi.Controls.Add(this.satinalmairsaliye);
             this.satinalmairsaliyesi.Location = new System.Drawing.Point(4, 27);
             this.satinalmairsaliyesi.Margin = new System.Windows.Forms.Padding(2);
             this.satinalmairsaliyesi.Name = "satinalmairsaliyesi";
@@ -1056,6 +1064,8 @@
             this.personelTabControl.SelectedIndex = 0;
             this.personelTabControl.Size = new System.Drawing.Size(1676, 871);
             this.personelTabControl.TabIndex = 0;
+            this.personelTabControl.Enter += new System.EventHandler(this.personelTabControl_Enter);
+            this.personelTabControl.Leave += new System.EventHandler(this.cariler_Leave);
             // 
             // personel
             // 
@@ -1081,6 +1091,8 @@
             this.personeldata.RowTemplate.Height = 24;
             this.personeldata.Size = new System.Drawing.Size(1664, 836);
             this.personeldata.TabIndex = 0;
+            this.personeldata.Click += new System.EventHandler(this.personeldata_Click);
+            this.personeldata.DoubleClick += new System.EventHandler(this.personeldata_DoubleClick);
             // 
             // cariler
             // 
@@ -1293,6 +1305,32 @@
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // satinalmatabsiparis
+            // 
+            this.satinalmatabsiparis.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.satinalmatabsiparis.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.satinalmatabsiparis.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.satinalmatabsiparis.Location = new System.Drawing.Point(2, 2);
+            this.satinalmatabsiparis.Margin = new System.Windows.Forms.Padding(2);
+            this.satinalmatabsiparis.Name = "satinalmatabsiparis";
+            this.satinalmatabsiparis.RowHeadersWidth = 51;
+            this.satinalmatabsiparis.RowTemplate.Height = 24;
+            this.satinalmatabsiparis.Size = new System.Drawing.Size(1664, 836);
+            this.satinalmatabsiparis.TabIndex = 1;
+            // 
+            // satinalmairsaliye
+            // 
+            this.satinalmairsaliye.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.satinalmairsaliye.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.satinalmairsaliye.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.satinalmairsaliye.Location = new System.Drawing.Point(2, 2);
+            this.satinalmairsaliye.Margin = new System.Windows.Forms.Padding(2);
+            this.satinalmairsaliye.Name = "satinalmairsaliye";
+            this.satinalmairsaliye.RowHeadersWidth = 51;
+            this.satinalmairsaliye.RowTemplate.Height = 24;
+            this.satinalmairsaliye.Size = new System.Drawing.Size(1664, 836);
+            this.satinalmairsaliye.TabIndex = 1;
+            // 
             // Ana
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 17F);
@@ -1373,6 +1411,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.onteklifdata)).EndInit();
             this.SatınAlma.ResumeLayout(false);
             this.urunlerTabControl.ResumeLayout(false);
+            this.satinalmasiparisleri.ResumeLayout(false);
+            this.satinalmairsaliyesi.ResumeLayout(false);
             this.Raporlar.ResumeLayout(false);
             this.raporlarTabControl.ResumeLayout(false);
             this.personeller.ResumeLayout(false);
@@ -1383,6 +1423,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.carihesapdata)).EndInit();
             this.panel1.ResumeLayout(false);
             this.contextMenuStrip1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.satinalmatabsiparis)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.satinalmairsaliye)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1475,5 +1517,7 @@
         private System.Windows.Forms.DataGridView uretimemridata;
         private System.Windows.Forms.TabPage kategori;
         private System.Windows.Forms.DataGridView kategoridata;
+        private System.Windows.Forms.DataGridView satinalmatabsiparis;
+        private System.Windows.Forms.DataGridView satinalmairsaliye;
     }
 }
