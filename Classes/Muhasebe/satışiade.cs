@@ -8,7 +8,8 @@ namespace ERP_PROJESİ.Classes.Muhasebe
 {
     internal class satışiade
     {
-        public int satisiadeirsaliyesiID { get; set; }
+        public int satisiadeirsaliyesiID { get; set; } 
+
         public int faturaid { get; set; }
         public int tarih { get; set; }
         public int kargofirmasi { get; set; }

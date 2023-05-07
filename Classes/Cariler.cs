@@ -16,6 +16,7 @@ namespace ERP_PROJESİ.Classes
 
         public string Carimail { get; set; }
 
+
         public string carihesapnumarası { get; set; }
 
         public string cariülke { get; set; }
@@ -28,6 +29,8 @@ namespace ERP_PROJESİ.Classes
 
         public bool sil { get; set; }
 
+
+        public string CariAdres { get; set; }
 
 
 

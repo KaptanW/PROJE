@@ -23,7 +23,8 @@ namespace ERP_PROJESİ
             public int ünvan { get; set; }
         }
 
-        SqlConnection SqlCon = new SqlConnection(@"Data Source=DESKTOP-PRMBC7J; initial Catalog = ERP; Integrated Security = True");
+        public string calisanid;
+        SqlConnection SqlCon = new SqlConnection(@"Data Source=DESKTOP-THFGP40; initial Catalog = ERP; Integrated Security = True");
 
         public Form1()
         {
@@ -41,9 +42,26 @@ namespace ERP_PROJESİ
         {
 
 
-                Login(textBox1.Text.Trim(),textBox2.Text.Trim());
-                
-            
+            string username = textBox1.Text;
+            string password = textBox2.Text;
+
+            int userId = ValidateUser(username, password);
+            if (userId != default(int))
+            {
+               MessageBox.Show("Giriş başarılı. Kullanıcı kimliği: " + userId);
+                // TODO: Bir sonraki forma geçmek için kullanıcı kimliğini (UserId) kullanın.
+                Ana anaa = new Ana(userId);
+
+                this.Hide();
+
+                anaa.Show();
+            }
+            else
+            {
+                MessageBox.Show("Kullanıcı adı veya parola yanlış.");
+            }
+
+
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -56,7 +74,9 @@ namespace ERP_PROJESİ
 
         }
 
-        public void Login(string username, string password)
+        
+
+            public void Login(string username, string password)
         {
             bool kullanıcı = false;
             if (SqlCon.State == ConnectionState.Closed)
@@ -81,10 +101,13 @@ namespace ERP_PROJESİ
                 reader = SqlCon.ExecuteReader("Parola", param, commandType: CommandType.StoredProcedure);
                 if (reader.Read())
                 {
-                   
-                            Ana anaa = new Ana();
-                            this.Hide();
-                            anaa.Show();
+
+
+                           //Ana anaa = new Ana();
+
+                           this.Hide();
+                    MessageBox.Show(calisanid); 
+                            //anaa.Show();
                   
 
 
@@ -95,6 +118,22 @@ namespace ERP_PROJESİ
             reader.Dispose();
             reader.Close();
 
+        }
+
+        private int ValidateUser(string username, string password)
+        {
+            using (SqlCon)
+            {
+                string sql = "SELECT UserId FROM kullanicilar_ WHERE kullaniciadi = @kullanici AND parola = @parola";
+                int userId = SqlCon.QuerySingleOrDefault<int>(sql, new { kullanici = username, parola = password });
+
+                return userId;
+            }
+        }
+
+        private void btnLogin_Click(object sender, EventArgs e)
+        {
+            
         }
         #region classlar
 

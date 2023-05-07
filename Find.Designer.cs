@@ -35,7 +35,7 @@
             // aramatxt
             // 
             this.aramatxt.Location = new System.Drawing.Point(116, 67);
-            this.aramatxt.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.aramatxt.Margin = new System.Windows.Forms.Padding(2);
             this.aramatxt.Name = "aramatxt";
             this.aramatxt.Size = new System.Drawing.Size(125, 20);
             this.aramatxt.TabIndex = 0;
@@ -60,7 +60,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.aramatxt);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Find";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Find";

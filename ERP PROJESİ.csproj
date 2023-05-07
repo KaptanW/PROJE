@@ -91,6 +91,7 @@
     <Compile Include="Classes\İmalat\Operasyonlar.cs" />
     <Compile Include="Classes\İmalat\Rota.cs" />
     <Compile Include="Classes\İmalat\uretimemirleri.cs" />
+    <Compile Include="Classes\İmalat\UretimEmriDetay.cs" />
     <Compile Include="Classes\İmalat\İmalatçı.cs" />
     <Compile Include="EklemeEkranı.cs">
       <SubType>Form</SubType>

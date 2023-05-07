@@ -11,12 +11,12 @@ namespace ERP_PROJESİ.Classes.İmalat
         public int uretimemriID { get; set; }
         public string calisanadi { get; set; }
 
-        public DateTime verilistarihi { get; set; }
-        public DateTime baslangıctarihi { get; set; }
-        public DateTime bitistarihi { get; set; }
-        public DateTime planlananbaslangıctarihi { get; set; }
+        public string verilistarihi { get; set; }
+        public string baslangıctarihi { get; set; }
+        public string bitistarihi { get; set; }
+        public string planlananbaslangıctarihi { get; set; }
         public int siparisID { get; set; }
-        public string urunadi { get; set; }
+        public string ID { get; set; }
         public int rotaID { get; set; }
         public string uretimindurumu { get; set; }
         public bool sil { get; set; }
