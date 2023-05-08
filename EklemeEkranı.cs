@@ -23,7 +23,7 @@ namespace ERP_PROJESİ
         public int selectedid { get; set; }
         public string baslamatarihi;
         ComboBox gizlicombo = new ComboBox();
-        SqlConnection SqlCon = new SqlConnection(@"Data Source=DESKTOP-PRMBC7J; initial Catalog = ERP; Integrated Security = True");
+        SqlConnection SqlCon = new SqlConnection(@"Data Source=DESKTOP-THFGP40; initial Catalog = ERP; Integrated Security = True");
         
         #region listler classlar için
         #endregion
@@ -746,11 +746,11 @@ namespace ERP_PROJESİ
                     urunıdlbl.Location = new Point(50, 150);
                     urunıdlbl.Size = new Size(150, 25);
                     Controls.Add(urunıdlbl);
-                    TextBox urunıdtxt = new TextBox();
+                    ComboBox urunıdtxt = new ComboBox();
                     urunıdtxt.Location = new Point(250, 150);
                     urunıdtxt.Size = new Size(200, 25);
                     Controls.Add(urunıdtxt);
-                    textBoxes.Add(urunıdtxt);
+                    ComboBoxes.Add(urunıdtxt);
                     Label urunmiktarlbl = new Label();
                     urunmiktarlbl.Text = "Miktar";
                     urunmiktarlbl.Location = new Point(50, 200);
@@ -792,13 +792,16 @@ namespace ERP_PROJESİ
                     uruneklebtn.Size = new Size(100, 25);
                     Controls.Add(uruneklebtn);
                     buttons.Add(uruneklebtn);
+                    buttons[0].Click += new EventHandler(irsaliyekle);
                     Button uruncikarbtn = new Button();
                     uruncikarbtn.Text = "Ürün Çıkar";
                     uruncikarbtn.Location = new Point(680, 360);
                     uruncikarbtn.Size = new Size(100, 25);
                     Controls.Add(uruncikarbtn);
                     buttons.Add(uruncikarbtn);
-
+                    buttons[1].Click += new EventHandler(irsaliyedetaysil);
+                    irsaliyedetayılistele();
+                    detaytablosu[0].Click += new EventHandler(irsaliyeid);
                     break;
                 #endregion
                 case "fatura":
@@ -923,7 +926,6 @@ namespace ERP_PROJESİ
             ad.Text = "Ekle";
             Controls.Add(ad);
             ad.Click += new EventHandler(ekle);
-
         }
 
         void ekle(object sender, EventArgs e)
@@ -953,6 +955,9 @@ namespace ERP_PROJESİ
                     break;
                 case "rotalar":
                     rotagüncelle();
+                    break;
+                case "satınalmairsaliyeleri":
+                    irsaliyegenelekleme();
                     break;
                 default:
                     break;
@@ -1222,6 +1227,31 @@ namespace ERP_PROJESİ
         #region urunler tab control
         #region urunler
 
+        #region ürünler kategori kombobox
+        //ürünlerdeki kategori için combo box
+
+        public void urunlercombobox()
+        {
+
+            if (SqlCon.State == ConnectionState.Closed)
+            {
+                SqlCon.Open();
+            }
+
+            List<kategori> list = SqlCon.Query<kategori>("select * from Urun_Kategorileri where kategoriadi Like '%%' and sil = 'True'", SqlCon).ToList<kategori>();
+            ComboBoxes[0].DataSource = list;
+            ComboBoxes[0].AutoCompleteMode = AutoCompleteMode.SuggestAppend; //AutoCompleteMode'ı None olarak ayarlayarak, yazarken seçeneklerin açılmayacağı ve yazma işlemine engel olmayacağı sağlanır.
+            ComboBoxes[0].AutoCompleteSource = AutoCompleteSource.CustomSource;
+            ComboBoxes[0].DropDownStyle = ComboBoxStyle.DropDown;
+            ComboBoxes[0].DisplayMember = "kategoriadi";
+            ComboBoxes[0].ValueMember = "urunkategoriID";
+            ComboBoxes[0].SelectionStart = ComboBoxes[0].Text.Length;
+            if (SqlCon.State == ConnectionState.Open)
+            {
+                SqlCon.Close();
+            }
+        }
+        #endregion
         public void Urunekleduzenle()
         {
             string secilenurun = "";
@@ -1281,13 +1311,146 @@ namespace ERP_PROJESİ
         }
         #endregion
         #region irsaliyeler
+        #region irsaliyedetaylisteleme
+
         public void irsaliyedetayılistele()
         {
-            List<irsaliyedetay> list = SqlCon.Query<irsaliyedetay>("select * from Uretim_Emri_Hammadde_Detay urd inner join Urun_Tablosu u on u.urunID = urd.urunID  where urd.sil = 'True' and uretimemriID = " + selectedid + "", SqlCon).ToList<irsaliyedetay>();
-            detaytablosu[0].DataSource = list;
-            detaytablosu[0].Columns[0].Visible = false;
-            detaytablosu[0].Columns[4].Visible = false;
+            if(SatinmiSatismi == "Satış")
+            {
+
+                List<irsaliyedetay> list = SqlCon.Query<irsaliyedetay>("select * from Satin_Alma_İrsaliye_Detay where irsaliyeID = " + selectedid + " and sil = 'True'", SqlCon).ToList<irsaliyedetay>();
+                detaytablosu[0].DataSource = list;
+            }
+            else if (SatinmiSatismi == "Satın")
+            {
+                List<irsaliyedetay> list = SqlCon.Query<irsaliyedetay>("select * from Satin_Alma_İrsaliye_Detay where irsaliyeID = " + selectedid + " and sil = 'True'", SqlCon).ToList<irsaliyedetay>();
+                detaytablosu[0].DataSource = list;
+            }
+
+            List<Cariler> list1 = SqlCon.Query<Cariler>("select * from Cari_Hesaplar where sil = 'True'", SqlCon).ToList<Cariler>();
+            ComboBoxes[0].DataSource = list1;
+            ComboBoxes[0].DropDownStyle = ComboBoxStyle.DropDown;
+            ComboBoxes[0].DisplayMember = "CariAdi";
+            ComboBoxes[0].ValueMember = "CariID";
+
+            if(SatinmiSatismi == "Satış")
+            {
+                List<Satışsipariş> list2 = SqlCon.Query<Satışsipariş>("select * from Urun_Tablosu where sil = 'True' and urunturu = 'Ticari'", SqlCon).ToList<Satışsipariş>();
+                ComboBoxes[1].DataSource = list2;
+                ComboBoxes[1].DropDownStyle = ComboBoxStyle.DropDown;
+                ComboBoxes[1].DisplayMember = "gidenSiparisID";
+                ComboBoxes[1].ValueMember = "gidenSiparisID";
+            }
+            else if (SatinmiSatismi == "Satın")
+            {
+                List<Satinalmasiparisleri> list2 = SqlCon.Query<Satinalmasiparisleri>("select * from Satin_Alma_Siparişleri where sil = 'True'", SqlCon).ToList<Satinalmasiparisleri>();
+                ComboBoxes[1].DataSource = list2;
+                ComboBoxes[1].DropDownStyle = ComboBoxStyle.DropDown;
+                ComboBoxes[1].DisplayMember = "satinalmaSiparisID";
+                ComboBoxes[1].ValueMember = "satinalmaSiparisID";
+            }
+            
+
+            List<ürünler> list3 = SqlCon.Query<ürünler>("select * from Urun_Tablosu where sil = 'True' and urunturu = 'Ticari'", SqlCon).ToList<ürünler>();
+            ComboBoxes[2].DataSource = list3;
+            ComboBoxes[2].DropDownStyle = ComboBoxStyle.DropDown;
+            ComboBoxes[2].DisplayMember = "urunadi";
+            ComboBoxes[2].ValueMember = "urunID";
         }
+        #endregion
+        #region irsaliyedetayidçekme
+
+        public void irsaliyeid(object sender, EventArgs e)
+        {
+            detayselectedid = int.Parse(detaytablosu[0].CurrentRow.Cells[0].Value.ToString());
+            ComboBoxes[2].SelectedValue =int.Parse(detaytablosu[0].CurrentRow.Cells[2].Value.ToString());
+            textBoxes[0].Text = detaytablosu[0].CurrentRow.Cells[3].Value.ToString();
+        }
+        #endregion
+        #region irsaliyedetayekleme
+
+        public void irsaliyekle(object sender, EventArgs e)
+        {
+            if (SqlCon.State == ConnectionState.Closed)
+            {
+                SqlCon.Open();
+            }
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@id", detayselectedid);
+            param.Add("@irsaliyeid", selectedid);
+            param.Add("@urunid", int.Parse(ComboBoxes[2].SelectedValue.ToString()));
+            param.Add("@urunadet", int.Parse(textBoxes[0].Text));
+            param.Add("@id", detayselectedid);
+            if(SatinmiSatismi == "Satın")
+            {
+                SqlCon.Execute("SatinAlmaİrsaliyeEkleDüzenle", param, commandType: CommandType.StoredProcedure);
+            }
+            else if (SatinmiSatismi == "Satış")
+            {
+
+                SqlCon.Execute("SatisAlmaİrsaliyeEkleDüzenle", param, commandType: CommandType.StoredProcedure);
+            }
+
+            if (SqlCon.State == ConnectionState.Open)
+            {
+                SqlCon.Close();
+            }
+
+            irsaliyedetayılistele();
+        }
+        #endregion
+        #region irsaliyedetaysilme
+
+        public void irsaliyedetaysil(object sender, EventArgs e)
+        {
+
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@id", detayselectedid);
+            if (SatinmiSatismi == "Satın")
+            {
+                SqlCon.Execute("Satinirsaliyedetaysilme",param,  commandType: CommandType.StoredProcedure);
+            }
+            else if (SatinmiSatismi == "Satış")
+            {
+
+                SqlCon.Execute("Satisirsaliyedetaysilme",param,  commandType: CommandType.StoredProcedure);
+            }
+
+            if (SqlCon.State == ConnectionState.Open)
+            {
+                SqlCon.Close();
+            }
+
+            irsaliyedetayılistele();
+        }
+        #endregion
+        #region irsaliyeekleme
+        public void irsaliyegenelekleme()
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@id", selectedid);
+            param.Add("@siparisid", int.Parse(ComboBoxes[1].SelectedValue.ToString()));
+            param.Add("@cariid", int.Parse(ComboBoxes[0].SelectedValue.ToString()));
+            param.Add("@kargofirması", textBoxes[1].Text);
+            if (CheckBoxes[0].Checked == true)
+            param.Add("@iade", true);
+            else param.Add("@iade", false);
+            if (SatinmiSatismi == "Satın")
+            {
+                SqlCon.Execute("SatinAlmaİrsaliyeGenelEkleDüzenle", param, commandType: CommandType.StoredProcedure);
+            }
+            else if (SatinmiSatismi == "Satış")
+            {
+
+                SqlCon.Execute("SatisAlmaİrsaliyeGenelEkleDüzenle", param, commandType: CommandType.StoredProcedure);
+            }
+
+            if (SqlCon.State == ConnectionState.Open)
+            {
+                SqlCon.Close();
+            }
+        }
+        #endregion
         #endregion
         #endregion
         #region Personeller
@@ -1353,33 +1516,6 @@ namespace ERP_PROJESİ
             }
         }
         #endregion
-        #endregion
-
-        
-        #region ürünler kategori kombobox
-        //ürünlerdeki kategori için combo box
-
-        public void urunlercombobox()
-        {
-
-            if (SqlCon.State == ConnectionState.Closed)
-            {
-                SqlCon.Open();
-            }
-
-            List<kategori> list = SqlCon.Query<kategori>("select * from Urun_Kategorileri where kategoriadi Like '%%' and sil = 'True'", SqlCon).ToList<kategori>();
-            ComboBoxes[0].DataSource = list;
-            ComboBoxes[0].AutoCompleteMode = AutoCompleteMode.SuggestAppend; //AutoCompleteMode'ı None olarak ayarlayarak, yazarken seçeneklerin açılmayacağı ve yazma işlemine engel olmayacağı sağlanır.
-            ComboBoxes[0].AutoCompleteSource = AutoCompleteSource.CustomSource;
-            ComboBoxes[0].DropDownStyle = ComboBoxStyle.DropDown;
-            ComboBoxes[0].DisplayMember = "kategoriadi";
-            ComboBoxes[0].ValueMember = "urunkategoriID";
-            ComboBoxes[0].SelectionStart = ComboBoxes[0].Text.Length;
-            if (SqlCon.State == ConnectionState.Open)
-            {
-                SqlCon.Close();
-            }
-        }
         #endregion
 
         #region çalışan ünvan

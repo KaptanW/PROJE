@@ -23,7 +23,7 @@ namespace ERP_PROJESİ
     public partial class Ana : Form
     {
 
-        SqlConnection SqlCon = new SqlConnection(@"Data Source=DESKTOP-PRMBC7J; initial Catalog = ERP; Integrated Security = True");
+        SqlConnection SqlCon = new SqlConnection(@"Data Source=DESKTOP-THFGP40; initial Catalog = ERP; Integrated Security = True");
         public string selectedPage { get; set; }
         public string SatinmiSatismi { get; set; }
         public int selectedid { get; set; }
@@ -508,11 +508,6 @@ namespace ERP_PROJESİ
         }
         #endregion
         #endregion
-
-
-
-
-
         #region SQL Listeleme
         #region İmalat
         #region Üretim Emri
@@ -749,17 +744,16 @@ namespace ERP_PROJESİ
         #region Satinalmaİrsaliyeleri
         public void satinalmairsaliyelistele()
         {
-            List<İrsaliyeler> list = SqlCon.Query<İrsaliyeler>("select irsaliyeID, ch.CariAdi as [CariAdi], siparisID, tarih, si.sil as [sil], kargofirması  from Satin_Alma_İrsaliyesi si left join Cari_Hesaplar ch on  si.cariID= ch.CariID    where irsaliyeID Like '%" + arama + "%' and si.sil = 'True'", SqlCon).ToList<İrsaliyeler>();
+            List<İrsaliyeler> list = SqlCon.Query<İrsaliyeler>("select irsaliyeID, ch.CariAdi as [CariAdi], siparisID, tarih, si.sil as [sil], kargofirması  from Satin_Alma_İrsaliyesi si left join Cari_Hesaplar ch on  si.cariID= ch.CariID    where irsaliyeID Like '%" + arama + "%' and si.sil = 'True' and iade ='False'", SqlCon).ToList<İrsaliyeler>();
             List<İrsaliyeler> list2 = SqlCon.Query<İrsaliyeler>("select irsaliyeID, ch.CariAdi as [CariAdi], siparisID, tarih, si.sil as [sil], kargofirması  from Satin_Alma_İrsaliyesi si left join Cari_Hesaplar ch on  si.cariID= ch.CariID    where irsaliyeID Like '%" + arama + "%' and si.sil = 'True' and iade ='True'", SqlCon).ToList<İrsaliyeler>();
-            gelenirsaliyedata.DataSource = list; gelenirsaliyedata.Columns[0].Visible = false;
+            gelenirsaliyedata.DataSource = list; 
             gelenirsaliyedata.Columns[1].HeaderText = "Cari Adı";
             gelenirsaliyedata.Columns[2].HeaderText = "Sipariş ID";
             gelenirsaliyedata.Columns[3].HeaderText = "Tarih";
             gelenirsaliyedata.Columns[4].HeaderText = "Kargo Firması";
             gelenirsaliyedata.Columns[5].Visible = false;
-            gelenirsaliyedata.Columns[0].Visible = false;
 
-            gelenirsaliyeiadedata.DataSource = list2; gelenirsaliyedata.Columns[0].Visible = false;
+            gelenirsaliyeiadedata.DataSource = list2; 
             gelenirsaliyeiadedata.Columns[1].HeaderText = "Cari Adı";
             gelenirsaliyeiadedata.Columns[0].Visible = false;
             gelenirsaliyeiadedata.Columns[2].HeaderText = "Sipariş ID";
@@ -773,7 +767,7 @@ namespace ERP_PROJESİ
         #region Satış İrsaliyeleri
         public void satisirsaliyelistele()
         {
-            List<İrsaliyeler> list = SqlCon.Query<İrsaliyeler>("select irsaliyeID, ch.CariAdi as [CariAdi], siparisID, tarih, si.sil as [sil], kargofirması  from Satis_Irsaliyesi si left join Cari_Hesaplar ch on  si.cariID= ch.CariID    where irsaliyeID Like '%" + arama + "%' and si.sil = 'True'", SqlCon).ToList<İrsaliyeler>();
+            List<İrsaliyeler> list = SqlCon.Query<İrsaliyeler>("select irsaliyeID, ch.CariAdi as [CariAdi], siparisID, tarih, si.sil as [sil], kargofirması  from Satis_Irsaliyesi si left join Cari_Hesaplar ch on  si.cariID= ch.CariID    where irsaliyeID Like '%" + arama + "%' and si.sil = 'True' and iade ='False'", SqlCon).ToList<İrsaliyeler>();
             gidenirsaliyedata.DataSource = list;
             gidenirsaliyedata.Columns[0].Visible = false;
             gidenirsaliyedata.Columns[1].HeaderText = "Cari Adı";
@@ -878,8 +872,6 @@ namespace ERP_PROJESİ
 
         //Cariler tamam
         #endregion
-
-
         #region güncelleme ekranı
         #region imalat
         #region uretimemri
@@ -954,7 +946,6 @@ namespace ERP_PROJESİ
             ekleekran.ShowDialog();
         }
         #endregion
-
         #region rota ekle
         public void yenirotaekle()
         {
@@ -979,7 +970,15 @@ namespace ERP_PROJESİ
             ekleekran.selectedPage = selectedPage;
             ekleekran.selectedid = selectedid;
             ekleekran.Show();
-            ekleekran.textBoxes[0].Text = rotadata.CurrentRow.Cells[1].Value.ToString();
+            try
+            {
+
+                ekleekran.textBoxes[0].Text = rotadata.CurrentRow.Cells[1].Value.ToString();
+            }
+            catch (Exception)
+            {
+
+            }
 
 
             ekleekran.Visible = false;
@@ -1112,7 +1111,7 @@ namespace ERP_PROJESİ
         {
             if(SatinmiSatismi == "Satış")
             selectedid = int.Parse(gidenirsaliyedata.CurrentRow.Cells[0].Value.ToString());
-            else if (SatinmiSatismi == "Satin")
+            else if (SatinmiSatismi == "Satın")
                 selectedid = int.Parse(gelenirsaliyedata.CurrentRow.Cells[0].Value.ToString());
             EklemeEkranı ekleekran = new EklemeEkranı(this);
             ekleekran.selectedPage = selectedPage;
@@ -1240,7 +1239,6 @@ namespace ERP_PROJESİ
 
 
         #endregion
-
         #region silme
         #region İmalat
 

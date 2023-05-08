@@ -82,7 +82,7 @@
     <Compile Include="Classes\Muhasebe\satınalımiade.cs" />
     <Compile Include="Classes\Muhasebe\satışfaturaları.cs" />
     <Compile Include="Classes\Muhasebe\satışiade.cs" />
-    <Compile Include="Classes\Satinalmasiparisleri.cs" />
+    <Compile Include="Classes\Satış\Satinalmasiparisleri.cs" />
     <Compile Include="Classes\Satış\Satışsipariş.cs" />
     <Compile Include="Classes\Ürünler\irsaliyedetay.cs" />
     <Compile Include="Classes\Ürünler\kategori.cs" />
