@@ -24,7 +24,7 @@ namespace ERP_PROJESİ
         }
 
         public string calisanid;
-        SqlConnection SqlCon = new SqlConnection(@"Data Source=DESKTOP-THFGP40; initial Catalog = ERP; Integrated Security = True");
+        SqlConnection SqlCon = new SqlConnection(@"Data Source=DESKTOP-PRMBC7J; initial Catalog = ERP; Integrated Security = True");
 
         public Form1()
         {

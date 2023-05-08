@@ -23,14 +23,17 @@ namespace ERP_PROJESİ
         public int selectedid { get; set; }
         public string baslamatarihi;
         ComboBox gizlicombo = new ComboBox();
-        SqlConnection SqlCon = new SqlConnection(@"Data Source=DESKTOP-THFGP40; initial Catalog = ERP; Integrated Security = True");
+        SqlConnection SqlCon = new SqlConnection(@"Data Source=DESKTOP-PRMBC7J; initial Catalog = ERP; Integrated Security = True");
         
         #region listler classlar için
         #endregion
         public List<TextBox> textBoxes = new List<TextBox>();
         public List<ComboBox> ComboBoxes = new List<ComboBox>(); 
         public List<RadioButton> radioButtons = new List<RadioButton>();
-        public List<DateTimePicker> DateTimePicks = new List<DateTimePicker>();    
+        public List<DateTimePicker> DateTimePicks = new List<DateTimePicker>();   
+        public List<CheckBox> CheckBoxes = new List<CheckBox>();
+
+        public string SatinmiSatismi { get; set; }
         public string selectedPage { get; set; }
         public List<DataGridView> detaytablosu = new List<DataGridView>();
         public List<Button> buttons = new List<Button>();
@@ -130,7 +133,6 @@ namespace ERP_PROJESİ
                     hammadelistesi.Size = new Size(350, 280);
                     detaytablosu.Add(hammadelistesi);
                     detaytablosu[0].Click += new EventHandler(hammaddeid);
-                    detaytablosu[0].AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                     Controls.Add(hammadelistesi);
                     RadioButton basladibutton = new RadioButton();
                     basladibutton.Text = "Başladı";
@@ -167,6 +169,7 @@ namespace ERP_PROJESİ
                     makinaaditxt.Location = new Point(250, 50);
                     makinaaditxt.Size = new Size(250, 50);
                     Controls.Add((makinaaditxt));
+                    textBoxes.Add(makinaaditxt);
                     Label makinastok = new Label();
                     makinastok.Text = "Makina Adeti";
                     makinastok.Location = new Point(50, 100);
@@ -176,6 +179,7 @@ namespace ERP_PROJESİ
                     makinastoktxt.Location = new Point(250, 100);
                     makinastoktxt.Size = new Size(250, 50);
                     Controls.Add((makinastoktxt));
+                    textBoxes.Add((makinastoktxt));
                     Label bakim = new Label();
                     bakim.Text = "Bakım Tarihi";
                     bakim.Location = new Point(50, 150);
@@ -185,6 +189,7 @@ namespace ERP_PROJESİ
                     bakimdate.Location = new Point(250, 150);
                     bakimdate.Size = new Size(250, 50);
                     Controls.Add(bakimdate);
+                    DateTimePicks.Add(bakimdate);
                     Label makinaacıklama = new Label();
                     makinaacıklama.Text = "Makina Açıklaması";
                     makinaacıklama.Location = new Point(50, 200);
@@ -195,9 +200,9 @@ namespace ERP_PROJESİ
                     makinaacıklamatxt.Size = new Size(250, 100);
                     makinaacıklamatxt.Multiline = true;
                     Controls.Add((makinaacıklamatxt));
+                    textBoxes.Add(makinaacıklamatxt);
                     #endregion
                     break;
-                    #region rotalar
 
                 case "rotalar":
                     #region Rota
@@ -211,37 +216,41 @@ namespace ERP_PROJESİ
                     RotaIDcombo.Location = new Point(250, 50);
                     RotaIDcombo.Size = new Size(250, 25);
                     Controls.Add(RotaIDcombo);
+                    ComboBoxes.Add(RotaIDcombo);
                     Button opekle = new Button();
                     opekle.Location = new Point(520, 50);
                     opekle.Size = new Size(200, 25);
                     opekle.Text = "Operasyon ekle";
                     Controls.Add(opekle);
+                    opekle.Click += new EventHandler(rotadetayaekle);
                     DataGridView oplistesi = new DataGridView();
                     oplistesi.Location = new Point(520, 80);
-                    oplistesi.Size = new Size(400, 150);
+                    oplistesi.Size = new Size(300, 150);
                     Controls.Add((oplistesi));
+                    detaytablosu.Add(oplistesi);
+                    oplistesi.Click += new EventHandler(opid);
                     Label urunid = new Label();
-                    urunid.Text = "Ürün";
+                    urunid.Text = "Rota Açıklama";
                     urunid.Location = new Point(50, 100);
                     urunid.Size = new Size(150, 25);
                     Controls.Add(urunid);
-                    ComboBox urunidcombo = new ComboBox();
-                    urunidcombo.Location = new Point(250, 100);
-                    urunidcombo.Size = new Size(250, 25);
-                    Controls.Add(urunidcombo);
-                    Label cikanmamul = new Label();
-                    cikanmamul.Text = "Çıkan Mamul";
-                    cikanmamul.Location = new Point(50, 150);
-                    cikanmamul.Size = new Size(150, 25);
-                    Controls.Add(cikanmamul);
-                    ComboBox cikanmamulcombo = new ComboBox();
-                    cikanmamulcombo.Location = new Point(250, 150);
-                    cikanmamulcombo.Size = new Size(250, 25);
-                    Controls.Add(cikanmamulcombo);
+                    TextBox rotaaçıklama = new TextBox();
+                    rotaaçıklama.Location = new Point(250, 100);
+                    rotaaçıklama.Size = new Size(250, 25);
+                    rotaaçıklama.Multiline = true;
+                    Controls.Add(rotaaçıklama);
+                    textBoxes.Add(rotaaçıklama);
+                    rotadetaytablosu();
+
+                    Button opsilme = new Button();
+                    opsilme.Location = new Point(520, 250);
+                    opsilme.Size = new Size(200, 25);
+                    opsilme.Text = "Operasyon sil";
+                    Controls.Add(opsilme);
+                    opsilme.Click += new EventHandler(opsil);
                     #endregion
-                    
+
                     break;
-                     #endregion
                 case "günlükraporekle":
                     #region günlükraporekle
                     giriskelimesi = "Günlük Rapor";
@@ -429,56 +438,6 @@ namespace ERP_PROJESİ
                     hakedisnottxt.Size = new Size(250, 50);
                     hakedisnottxt.Multiline = true;
                     Controls.Add(hakedisnottxt);
-                    #endregion
-                    break;
-                case "fatura":
-                    #region faturalar
-                    giriskelimesi = "Fatura";
-                    Label Cari = new Label();
-                    Cari.Text = "Cari";
-                    Cari.Location = new Point(50, 50);
-                    Cari.Size = new Size(150, 25);
-                    Controls.Add(Cari);
-                    ComboBox caricombo = new ComboBox();
-                    caricombo.Location = new Point(250, 50);
-                    caricombo.Size = new Size(250, 25);
-                    Controls.Add(caricombo);
-                    Label Tarih = new Label();
-                    Tarih.Text = "Tarih";
-                    Tarih.Location = new Point(50, 100);
-                    Tarih.Size = new Size(150, 25);
-                    Controls.Add(Tarih);
-                    DateTimePicker faturatarih = new DateTimePicker();
-                    faturatarih.Location = new Point(250, 100);
-                    faturatarih.Size = new Size(250, 25);
-                    Controls.Add(faturatarih);
-                    Label faturatutar = new Label();
-                    faturatutar.Text = "Tutar";
-                    faturatutar.Location = new Point(50, 150);
-                    faturatutar.Size = new Size(150, 25);
-                    Controls.Add(faturatutar);
-                    TextBox faturatutartxt = new TextBox();
-                    faturatutartxt.Location = new Point(250, 150);
-                    faturatutartxt.Size = new Size(250, 25);
-                    Controls.Add(faturatutartxt);
-                    Label ödemebilgisi = new Label();
-                    ödemebilgisi.Text = "Ödeme Bilgisi";
-                    ödemebilgisi.Location = new Point(50, 200);
-                    ödemebilgisi.Size = new Size(150, 25);
-                    Controls.Add(ödemebilgisi);
-                    TextBox ödemebilgisitxt = new TextBox();
-                    ödemebilgisitxt.Location = new Point(250, 200);
-                    ödemebilgisitxt.Size = new Size(250, 25);
-                    Controls.Add(ödemebilgisitxt);
-                    Label İade = new Label();
-                    İade.Text = "İade";
-                    İade.Location = new Point(50, 250);
-                    İade.Size = new Size(150, 25);
-                    Controls.Add(İade);
-                    CheckBox iadecheck = new CheckBox();
-                    iadecheck.Location = new Point(250, 250);
-                    iadecheck.Size = new Size(250, 25);
-                    Controls.Add(iadecheck);
                     #endregion
                     break;
                 case "cariler":
@@ -701,74 +660,77 @@ namespace ERP_PROJESİ
                     Controls.Add(kategoriacıklamaTXT);
                     #endregion
                     break;
-                case "satınalmasiparişleri":
+                case "siparişler":
                     #region Satın Alma Siparişleri
-                    giriskelimesi = "Satın Alma Siparişleri";
-                    Label Stnalmalbl = new Label();
-                    Stnalmalbl.Text = "Cari Adı";
-                    Stnalmalbl.Location = new Point(50, 50);
-                    Stnalmalbl.Size = new Size(150, 25);
-                    Controls.Add(Stnalmalbl);
-                    TextBox stnalmatxt = new TextBox();
-                    stnalmatxt.Location = new Point(250, 50);
-                    stnalmatxt.Size = new Size(200, 25);
-                    Controls.Add(stnalmatxt);
-                    Label urunadı = new Label();
-                    urunadı.Text = "Ürün Adı";
-                    urunadı.Location = new Point(50, 100);
-                    urunadı.Size = new Size(150, 25);
-                    Controls.Add(urunadı);
-                    ComboBox urunadtxt = new ComboBox();
-                    urunadtxt.Location = new Point(250, 100);
+                    giriskelimesi = "Satış Siparişleri";
+                    Label cariadiLBL1 = new Label();
+                    cariadiLBL1.Text = "Cari Adı";
+                    cariadiLBL1.Location = new Point(50, 50);
+                    cariadiLBL1.Size = new Size(150, 25);
+                    Controls.Add(cariadiLBL1);
+                    TextBox cariaditxt = new TextBox();
+                    cariaditxt.Location = new Point(250, 50);
+                    cariaditxt.Size = new Size(200, 25);
+                    Controls.Add(cariaditxt);
+                    Label siparisTH = new Label();
+                    siparisTH.Text = "Siparis Tarihi";
+                    siparisTH.Location = new Point(50, 75);
+                    siparisTH.Size = new Size(150, 25);
+                    Controls.Add(siparisTH);
+                    DateTimePicker urunadtxt = new DateTimePicker();
+                    urunadtxt.Location = new Point(250, 75);
                     urunadtxt.Size = new Size(200, 25);
                     Controls.Add(urunadtxt);
-                    Label birimfiyatlbl = new Label();
-                    birimfiyatlbl.Text = "Birim Fiyat";
-                    birimfiyatlbl.Location = new Point(50, 150);
-                    birimfiyatlbl.Size = new Size(150, 25);
-                    Controls.Add(birimfiyatlbl);
-                    TextBox birimfiyattxt = new TextBox();
-                    birimfiyattxt.Location = new Point(250, 150);
+                    Label teslimtarihiTH = new Label();
+                    teslimtarihiTH.Text = "Teslim Tarihi";
+                    teslimtarihiTH.Location = new Point(50, 100);
+                    teslimtarihiTH.Size = new Size(150, 25);
+                    Controls.Add(teslimtarihiTH);
+                    DateTimePicker birimfiyattxt = new DateTimePicker();
+                    birimfiyattxt.Location = new Point(250, 100);
                     birimfiyattxt.Size = new Size(200, 25);
                     Controls.Add(birimfiyattxt);
-                    Label miktarlbl = new Label();
-                    miktarlbl.Text = "Miktar";
-                    miktarlbl.Location = new Point(50, 200);
-                    miktarlbl.Size = new Size(150, 25);
-                    Controls.Add(miktarlbl);
-                    TextBox miktarattxt = new TextBox();
-                    miktarattxt.Location = new Point(250, 200);
-                    miktarattxt.Size = new Size(200, 25);
-                    Controls.Add(miktarattxt);
-                    Label indirimoranilbl = new Label();
-                    indirimoranilbl.Text = "İndirim Oranı";
-                    indirimoranilbl.Location = new Point(50, 250);
-                    indirimoranilbl.Size = new Size(150, 25);
-                    Controls.Add(indirimoranilbl);
-                    TextBox indirimoranitxt = new TextBox();
-                    indirimoranitxt.Location = new Point(250, 250);
-                    indirimoranitxt.Size = new Size(200, 25);
-                    Controls.Add(indirimoranitxt);
+                    Label kargofirmaLBL = new Label();
+                    kargofirmaLBL.Text = "Gönderilen Kargo Firması";
+                    kargofirmaLBL.Location = new Point(50, 125);
+                    kargofirmaLBL.Size = new Size(150, 25);
+                    Controls.Add(kargofirmaLBL);
+                    TextBox kargofirmatxt = new TextBox();
+                    kargofirmatxt.Location = new Point(250, 125);
+                    kargofirmatxt.Size = new Size(200, 25);
+                    Controls.Add(kargofirmatxt);
                     DataGridView Satinalmadetaydatagrid = new DataGridView();
-                    Satinalmadetaydatagrid.Location = new Point(600, 50);
-                    Satinalmadetaydatagrid.Size = new Size(300, 400);
+                    Satinalmadetaydatagrid.Location = new Point(515, 50);
+                    Satinalmadetaydatagrid.Size = new Size(350, 300);
                     Controls.Add(Satinalmadetaydatagrid);
-                    break;
+                    Button ekleBTN2 = new Button();
+                    ekleBTN2.Text = "EKLE";
+                    ekleBTN2.Location = new Point(575, 375);
+                    ekleBTN2.Size = new Size(75, 50);
+                    Controls.Add(ekleBTN2);
+                    Button ekleBTN3 = new Button();
+                    ekleBTN3.Text = "ÇIKAR";
+                    ekleBTN3.Location = new Point(750, 375);
+                    ekleBTN3.Size = new Size(75, 50);
+                    Controls.Add(ekleBTN3);
 
-                #endregion
-                case "irsaliye":
+
+                    #endregion
+                    break;
+                case "satınalmairsaliyeleri":
                     #region satın alma irsaliyesi
 
-                    giriskelimesi = "Satın Alma İrsaliyesi";
+                    giriskelimesi = "İrsaliye";
                     Label cariadilbl = new Label();
                     cariadilbl.Text = "Cari Adı";
                     cariadilbl.Location = new Point(50, 50);
                     cariadilbl.Size = new Size(150, 25);
                     Controls.Add(cariadilbl);
-                    TextBox cariaditxt = new TextBox();
-                    cariaditxt.Location = new Point(250, 50);
-                    cariaditxt.Size = new Size(200, 25);
-                    Controls.Add(cariaditxt);
+                    ComboBox cariadicombo = new ComboBox();
+                    cariadicombo.Location = new Point(250, 50);
+                    cariadicombo.Size = new Size(200, 25);
+                    Controls.Add(cariadicombo);
+                    ComboBoxes.Add(cariadicombo);
                     Label siparisIDlbl = new Label();
                     siparisIDlbl.Text = "SiparişID";
                     siparisIDlbl.Location = new Point(50, 100);
@@ -778,31 +740,176 @@ namespace ERP_PROJESİ
                     siparisIDcombo.Location = new Point(250, 100);
                     siparisIDcombo.Size = new Size(200, 25);
                     Controls.Add(siparisIDcombo);
-                    Button irsaliyeyeeklebtn = new Button();
-                    irsaliyeyeeklebtn.Location = new Point(665, 265);
-                    irsaliyeyeeklebtn.Size = new Size(20, 20);
-                    Controls.Add(irsaliyeyeeklebtn);
-                    Button İrsaliyedencikarbtn = new Button();
-                    İrsaliyedencikarbtn.Location = new Point(825, 265);
-                    İrsaliyedencikarbtn.Size = new Size(20, 20);
-                    Controls.Add(İrsaliyedencikarbtn);
-                    TextBox miktartxt = new TextBox();
-                    miktartxt.Location = new Point(705, 265);
-                    miktartxt.Size = new Size(100, 25);
-                    Controls.Add(miktartxt);
-                    DataGridView siparisdatagrid = new DataGridView();
-                    siparisdatagrid.Location = new Point(600, 50);
-                    siparisdatagrid.Size = new Size(300, 200);
-                    Controls.Add(siparisdatagrid);
-                    DataGridView irsaliyedatagrid = new DataGridView();
-                    irsaliyedatagrid.Location = new Point(600, 300);
-                    irsaliyedatagrid.Size = new Size(300, 200);
-                    Controls.Add(irsaliyedatagrid);
+                    ComboBoxes.Add(siparisIDcombo);
+                    Label urunıdlbl = new Label();
+                    urunıdlbl.Text = "UrunID";
+                    urunıdlbl.Location = new Point(50, 150);
+                    urunıdlbl.Size = new Size(150, 25);
+                    Controls.Add(urunıdlbl);
+                    TextBox urunıdtxt = new TextBox();
+                    urunıdtxt.Location = new Point(250, 150);
+                    urunıdtxt.Size = new Size(200, 25);
+                    Controls.Add(urunıdtxt);
+                    textBoxes.Add(urunıdtxt);
+                    Label urunmiktarlbl = new Label();
+                    urunmiktarlbl.Text = "Miktar";
+                    urunmiktarlbl.Location = new Point(50, 200);
+                    urunmiktarlbl.Size = new Size(150, 25);
+                    Controls.Add(urunmiktarlbl);
+                    TextBox urunmiktartxt = new TextBox();
+                    urunmiktartxt.Location = new Point(250, 200);
+                    urunmiktartxt.Size = new Size(200, 25);
+                    Controls.Add(urunmiktartxt);
+                    textBoxes.Add(urunmiktartxt);
+                    Label kargofirmasilbl = new Label();
+                    kargofirmasilbl.Text = "Kargo Firması";
+                    kargofirmasilbl.Location = new Point(50, 250);
+                    kargofirmasilbl.Size = new Size(150, 25);
+                    Controls.Add(kargofirmasilbl);
+                    TextBox kargofirmasitxt = new TextBox();
+                    kargofirmasitxt.Location = new Point(250, 250);
+                    kargofirmasitxt.Size = new Size(200, 25);
+                    Controls.Add(kargofirmasitxt);
+                    textBoxes.Add(kargofirmasitxt);
+                    Label iadelbl = new Label();
+                    iadelbl.Text = "İade";
+                    iadelbl.Location = new Point(50, 300);
+                    iadelbl.Size = new Size(50, 25);
+                    Controls.Add(iadelbl);
+                    CheckBox iadeck = new CheckBox();
+                    iadeck.Location = new Point(250, 300);
+                    iadeck.Size = new Size(50, 25);
+                    Controls.Add(iadeck);
+                    CheckBoxes.Add(iadeck);
+                    DataGridView irsaliyedetaysdatagrid = new DataGridView();
+                    irsaliyedetaysdatagrid.Location = new Point(470, 50);
+                    irsaliyedetaysdatagrid.Size = new Size(400, 300);
+                    Controls.Add(irsaliyedetaysdatagrid);
+                    detaytablosu.Add(irsaliyedetaysdatagrid);
+                    Button uruneklebtn = new Button();
+                    uruneklebtn.Text = "Ürün Ekle";
+                    uruneklebtn.Location = new Point(570, 360);
+                    uruneklebtn.Size = new Size(100, 25);
+                    Controls.Add(uruneklebtn);
+                    buttons.Add(uruneklebtn);
+                    Button uruncikarbtn = new Button();
+                    uruncikarbtn.Text = "Ürün Çıkar";
+                    uruncikarbtn.Location = new Point(680, 360);
+                    uruncikarbtn.Size = new Size(100, 25);
+                    Controls.Add(uruncikarbtn);
+                    buttons.Add(uruncikarbtn);
 
                     break;
                 #endregion
+                case "fatura":
+                    #region Satın Alım Faturası
+                    giriskelimesi = "Satin Alım Faturası";
+                    Label siparisidLBL = new Label();
+                    siparisidLBL.Text = "Sipariş";
+                    siparisidLBL.Location = new Point(50, 50);
+                    siparisidLBL.Size = new Size(50, 25);
+                    Controls.Add(siparisidLBL);
+                    TextBox siparisidTXT = new TextBox();
+                    siparisidTXT.Location = new Point(250, 50);
+                    siparisidTXT.Size = new Size(250, 25);
+                    Controls.Add(siparisidTXT);
+                    Label cariidLBL = new Label();
+                    cariidLBL.Text = "Cari";
+                    cariidLBL.Location = new Point(50, 75);
+                    cariidLBL.Size = new Size(50, 25);
+                    Controls.Add(cariidLBL);
+                    TextBox cariidTXT = new TextBox();
+                    cariidTXT.Location = new Point(250, 75);
+                    cariidTXT.Size = new Size(250, 25);
+                    Controls.Add(cariidTXT);
+                    Label tarihLBL = new Label();
+                    tarihLBL.Text = "Tarih";
+                    tarihLBL.Location = new Point(50, 100);
+                    tarihLBL.Size = new Size(50, 25);
+                    Controls.Add(tarihLBL);
+                    DateTimePicker tarihDT = new DateTimePicker();
+                    tarihDT.Location = new Point(250, 100);
+                    tarihDT.Size = new Size(250, 25);
+                    Controls.Add(tarihDT);
+                    Label tutarLBL = new Label();
+                    tutarLBL.Text = "Tutar";
+                    tutarLBL.Location = new Point(50, 125);
+                    tutarLBL.Size = new Size(50, 25);
+                    Controls.Add(tutarLBL);
+                    TextBox tutarTXT = new TextBox();
+                    tutarTXT.Location = new Point(250, 125);
+                    tutarTXT.Size = new Size(250, 25);
+                    Controls.Add(tutarTXT);
+                    Label odemeLBL = new Label();
+                    odemeLBL.Text = "Ödeme Bilgisi";
+                    odemeLBL.Location = new Point(50, 150);
+                    odemeLBL.Size = new Size(50, 25);
+                    Controls.Add(odemeLBL);
+                    TextBox odemeTXT = new TextBox();
+                    odemeTXT.Location = new Point(250, 150);
+                    odemeTXT.Size = new Size(250, 25);
+                    Controls.Add(odemeTXT);
+                    Label ürünıdLBL = new Label();
+                    ürünıdLBL.Text = "Ürün ID'si";
+                    ürünıdLBL.Location = new Point(50, 175);
+                    ürünıdLBL.Size = new Size(175, 25);
+                    Controls.Add(ürünıdLBL);
+                    TextBox ürünıdTXT = new TextBox();
+                    ürünıdTXT.Location = new Point(250, 175);
+                    ürünıdTXT.Size = new Size(250, 25);
+                    Controls.Add(ürünıdTXT);
+                    Label ürünadetLBL = new Label();
+                    ürünadetLBL.Text = "Ürün Adet";
+                    ürünadetLBL.Location = new Point(50, 200);
+                    ürünadetLBL.Size = new Size(175, 25);
+                    Controls.Add(ürünadetLBL);
+                    TextBox ürünadetTXT = new TextBox();
+                    ürünadetTXT.Location = new Point(250, 200);
+                    ürünadetTXT.Size = new Size(250, 25);
+                    Controls.Add(ürünadetTXT);
+                    Label birimfiyatLBL = new Label();
+                    birimfiyatLBL.Text = "Birim Fiyat";
+                    birimfiyatLBL.Location = new Point(50, 225);
+                    birimfiyatLBL.Size = new Size(175, 25);
+                    Controls.Add(birimfiyatLBL);
+                    TextBox birimfiyatTXT = new TextBox();
+                    birimfiyatTXT.Location = new Point(250, 225);
+                    birimfiyatTXT.Size = new Size(250, 25);
+                    Controls.Add(birimfiyatTXT);
+                    DataGridView dataDGW = new DataGridView();
+                    dataDGW.Location = new Point(515, 50);
+                    dataDGW.Size = new Size(350, 300);
+                    detaytablosu.Add(dataDGW);
+                    Controls.Add(dataDGW);
+                    Button ekleBTN = new Button();
+                    ekleBTN.Text = "EKLE";
+                    ekleBTN.Location = new Point(575, 375);
+                    ekleBTN.Size = new Size(75, 50);
+                    Controls.Add(ekleBTN);
+                    Button ekleBTN1 = new Button();
+                    ekleBTN1.Text = "ÇIKAR";
+                    ekleBTN1.Location = new Point(750, 375);
+                    ekleBTN1.Size = new Size(75, 50);
+                    Controls.Add(ekleBTN1);
+                    CheckBox iadeCH = new CheckBox();
+                    iadeCH.Location = new Point(250, 250);
+                    iadeCH.Size = new Size(100, 50);
+                    iadeCH.Text = "İade";
+                    Controls.Add(iadeCH);
+                    break;
+                    #endregion
+
                 default:
                     break;
+            }
+            try
+            {
+
+                detaytablosu[0].AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            }
+            catch (Exception)
+            {
+
             }
             Label giriş = new Label();
             giriş.Text = " " + (giriskelimesi) + " bilgilerini giriniz";
@@ -841,6 +948,12 @@ namespace ERP_PROJESİ
                 case "üretimemri":
                     uretimemriduzenle();
                 break;
+                case "makinalar":
+                    makinagüncelleekle();
+                    break;
+                case "rotalar":
+                    rotagüncelle();
+                    break;
                 default:
                     break;
             }
@@ -912,15 +1025,15 @@ namespace ERP_PROJESİ
         {
             SqlCon.Open();
 
-            DynamicParameters param = new DynamicParameters();
-            param.Add("@detayid", detayselectedid);
-            param.Add("@id", selectedid);
-            param.Add("@urunid", int.Parse(ComboBoxes[2].SelectedValue.ToString()));
-            param.Add("@urunmiktar", int.Parse(textBoxes[2].Text));
-            SqlCon.Execute("UretimiemridetayDuzenleekle", param, commandType: CommandType.StoredProcedure);
-            üretimemriuruncombo();
-            detayselectedid = 0;
-            SqlCon.Close();
+                DynamicParameters param = new DynamicParameters();
+                param.Add("@detayid", detayselectedid);
+                param.Add("@id", selectedid);
+                param.Add("@urunid", int.Parse(ComboBoxes[2].SelectedValue.ToString()));
+                param.Add("@urunmiktar", int.Parse(textBoxes[2].Text));
+                SqlCon.Execute("UretimiemridetayDuzenleekle", param, commandType: CommandType.StoredProcedure);
+                üretimemriuruncombo();
+                detayselectedid = 0;
+                SqlCon.Close();
         }
 
         #endregion
@@ -972,20 +1085,142 @@ namespace ERP_PROJESİ
         }
         #endregion
         #endregion
+        #region makinalar
+        public void makinagüncelleekle()
+        {
+            if (SqlCon.State == ConnectionState.Closed)
+            {
+                SqlCon.Open();
+            }
+
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@id",selectedid);
+            param.Add("@MakinaAdi", textBoxes[0].Text);
+            param.Add("@makinastogu", textBoxes[1].Text);
+            param.Add("@bakımtarihi", DateTimePicks[0].Value.ToString());
+            param.Add("@makinaaciklaması", textBoxes[2].Text);
+            SqlCon.Execute("MakinaEkleVeDuzenle", param, commandType: CommandType.StoredProcedure);
+
+
+
+            if (SqlCon.State == ConnectionState.Open)
+            {
+                SqlCon.Close();
+            }
+        }
+        #endregion
+        #region rota detay tablosu
+
+
+
+        //sil false olduğu için çoka çokta yeni ekleyemiyor.
+        public void rotadetaytablosu()
+        {
+            List<Operasyonlar> list = SqlCon.Query<Operasyonlar>("select * from Operasyon where sil = 'True'", SqlCon).ToList<Operasyonlar>();
+            ComboBoxes[0].DataSource = list;
+            ComboBoxes[0].DropDownStyle = ComboBoxStyle.DropDown;
+            ComboBoxes[0].DisplayMember = "OperasyonAdi";
+            ComboBoxes[0].ValueMember = "OperasyonID";
+
+            List<Rotaoperasyon> list1 = SqlCon.Query<Rotaoperasyon>("select * from Rota_ve_Operasyon where sil = 'True' and rotaID = "+ selectedid + "", SqlCon).ToList<Rotaoperasyon>();
+            detaytablosu[0].DataSource = list1;
+
+
+        }
+
+        public void rotadetayaekle(object sender, EventArgs e)
+        {
+
+            if (SqlCon.State == ConnectionState.Closed)
+            {
+                SqlCon.Open();
+            }
+
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@id", selectedid);
+            param.Add("@operasyonid", int.Parse(ComboBoxes[0].SelectedValue.ToString()));
+            try
+            {
+
+                SqlCon.Execute("RotayaOperasyonEkleDuzenle", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception)
+            {
+
+                MessageBox.Show("Bu rotada bu operasyon var");
+            }
+            if (SqlCon.State == ConnectionState.Open)
+            {
+                SqlCon.Close();
+            }
+
+            rotadetaytablosu();
+        }
+
+        public void opsil(object sender, EventArgs e)
+        {
+            if (SqlCon.State == ConnectionState.Closed)
+            {
+                SqlCon.Open();
+            }
+
+            
+
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@id", selectedid);
+            param.Add("@operasyonid", detayselectedid);
+            SqlCon.Execute("Rotaoperasyonusil", param, commandType: CommandType.StoredProcedure);
+
+            if (SqlCon.State == ConnectionState.Open)
+            {
+                SqlCon.Close();
+            }
+            rotadetaytablosu();
+        }
+        public void rotagüncelle()
+        {
+            if (SqlCon.State == ConnectionState.Closed)
+            {
+                SqlCon.Open();
+            }
+
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@id", selectedid);
+            param.Add("@aciklama", textBoxes[0].Text);
+            SqlCon.Execute("rotaduzenle", param, commandType: CommandType.StoredProcedure);
+            if (SqlCon.State == ConnectionState.Open)
+            {
+                SqlCon.Close();
+            }
+        }
+        public void opid(object sender, EventArgs e)
+        {
+            detayselectedid = int.Parse(detaytablosu[0].CurrentRow.Cells[1].Value.ToString());
+            ComboBoxes[0].SelectedValue = int.Parse(detaytablosu[0].CurrentRow.Cells[1].Value.ToString());
+        }
+        #endregion
         #region operasyonlar
 
         public void operasyoneklegüncelle()
         {
-
+            if (SqlCon.State == ConnectionState.Closed)
+            {
+                SqlCon.Open();
+            }
             DynamicParameters param = new DynamicParameters();
             param.Add("@OperasyonID", selectedid);
             param.Add("@OperasyonAdi", textBoxes[0].Text.Trim());
             param.Add("@sil", "True");
             SqlCon.Execute("OperasyonEkleveDuzenle", param, commandType: CommandType.StoredProcedure);
+            if (SqlCon.State == ConnectionState.Open)
+            {
+                SqlCon.Close();
+            }
         }
         #endregion
         #endregion
         #region urunler tab control
+        #region urunler
 
         public void Urunekleduzenle()
         {
@@ -1022,6 +1257,7 @@ namespace ERP_PROJESİ
                 SqlCon.Close();
             }
         }
+        #endregion
         #region kategori
         public void kategoriguncelleme()
         {
@@ -1042,6 +1278,15 @@ namespace ERP_PROJESİ
             {
                 SqlCon.Close();
             }
+        }
+        #endregion
+        #region irsaliyeler
+        public void irsaliyedetayılistele()
+        {
+            List<irsaliyedetay> list = SqlCon.Query<irsaliyedetay>("select * from Uretim_Emri_Hammadde_Detay urd inner join Urun_Tablosu u on u.urunID = urd.urunID  where urd.sil = 'True' and uretimemriID = " + selectedid + "", SqlCon).ToList<irsaliyedetay>();
+            detaytablosu[0].DataSource = list;
+            detaytablosu[0].Columns[0].Visible = false;
+            detaytablosu[0].Columns[4].Visible = false;
         }
         #endregion
         #endregion
