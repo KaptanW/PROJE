@@ -587,11 +587,6 @@ namespace ERP_PROJESİ
         }
         #endregion
         #endregion
-
-
-
-
-
         #region SQL Listeleme
         #region İmalat
         #region Üretim Emri
@@ -826,17 +821,16 @@ namespace ERP_PROJESİ
         #region Satinalmaİrsaliyeleri
         public void satinalmairsaliyelistele()
         {
-            List<İrsaliyeler> list = SqlCon.Query<İrsaliyeler>("select irsaliyeID, ch.CariAdi as [CariAdi], siparisID, tarih, si.sil as [sil], kargofirması  from Satin_Alma_İrsaliyesi si left join Cari_Hesaplar ch on  si.cariID= ch.CariID    where irsaliyeID Like '%" + arama + "%' and si.sil = 'True'", SqlCon).ToList<İrsaliyeler>();
+            List<İrsaliyeler> list = SqlCon.Query<İrsaliyeler>("select irsaliyeID, ch.CariAdi as [CariAdi], siparisID, tarih, si.sil as [sil], kargofirması  from Satin_Alma_İrsaliyesi si left join Cari_Hesaplar ch on  si.cariID= ch.CariID    where irsaliyeID Like '%" + arama + "%' and si.sil = 'True' and iade ='False'", SqlCon).ToList<İrsaliyeler>();
             List<İrsaliyeler> list2 = SqlCon.Query<İrsaliyeler>("select irsaliyeID, ch.CariAdi as [CariAdi], siparisID, tarih, si.sil as [sil], kargofirması  from Satin_Alma_İrsaliyesi si left join Cari_Hesaplar ch on  si.cariID= ch.CariID    where irsaliyeID Like '%" + arama + "%' and si.sil = 'True' and iade ='True'", SqlCon).ToList<İrsaliyeler>();
-            gelenirsaliyedata.DataSource = list; gelenirsaliyedata.Columns[0].Visible = false;
+            gelenirsaliyedata.DataSource = list; 
             gelenirsaliyedata.Columns[1].HeaderText = "Cari Adı";
             gelenirsaliyedata.Columns[2].HeaderText = "Sipariş ID";
             gelenirsaliyedata.Columns[3].HeaderText = "Tarih";
             gelenirsaliyedata.Columns[4].HeaderText = "Kargo Firması";
             gelenirsaliyedata.Columns[5].Visible = false;
-            gelenirsaliyedata.Columns[0].Visible = false;
 
-            gelenirsaliyeiadedata.DataSource = list2; gelenirsaliyedata.Columns[0].Visible = false;
+            gelenirsaliyeiadedata.DataSource = list2; 
             gelenirsaliyeiadedata.Columns[1].HeaderText = "Cari Adı";
             gelenirsaliyeiadedata.Columns[0].Visible = false;
             gelenirsaliyeiadedata.Columns[2].HeaderText = "Sipariş ID";
@@ -850,7 +844,7 @@ namespace ERP_PROJESİ
         #region Satış İrsaliyeleri
         public void satisirsaliyelistele()
         {
-            List<İrsaliyeler> list = SqlCon.Query<İrsaliyeler>("select irsaliyeID, ch.CariAdi as [CariAdi], siparisID, tarih, si.sil as [sil], kargofirması  from Satis_Irsaliyesi si left join Cari_Hesaplar ch on  si.cariID= ch.CariID    where irsaliyeID Like '%" + arama + "%' and si.sil = 'True'", SqlCon).ToList<İrsaliyeler>();
+            List<İrsaliyeler> list = SqlCon.Query<İrsaliyeler>("select irsaliyeID, ch.CariAdi as [CariAdi], siparisID, tarih, si.sil as [sil], kargofirması  from Satis_Irsaliyesi si left join Cari_Hesaplar ch on  si.cariID= ch.CariID    where irsaliyeID Like '%" + arama + "%' and si.sil = 'True' and iade ='False'", SqlCon).ToList<İrsaliyeler>();
             gidenirsaliyedata.DataSource = list;
             gidenirsaliyedata.Columns[0].Visible = false;
             gidenirsaliyedata.Columns[1].HeaderText = "Cari Adı";
@@ -949,8 +943,6 @@ namespace ERP_PROJESİ
 
         //Cariler tamam
         #endregion
-
-
         #region güncelleme ekranı
         #region imalat
         #region uretimemri
@@ -1043,7 +1035,6 @@ namespace ERP_PROJESİ
             ekleekran.ShowDialog();
         }
         #endregion
-
         #region rota ekle
         public void yenirotaekle()
         {
@@ -1337,7 +1328,6 @@ namespace ERP_PROJESİ
 
 
         #endregion
-
         #region silme
         #region İmalat
         #region Üretim Emri Sil
@@ -1572,8 +1562,6 @@ namespace ERP_PROJESİ
 
         #endregion
 
-
-        #endregion
         #region boş
 
         private void satinaidedata_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -1586,14 +1574,16 @@ namespace ERP_PROJESİ
 
         }
 
-
-        #endregion
-
-
         private void hammaddedata_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }
+
+        #endregion
+        #endregion
+
+
+
 
 
     }

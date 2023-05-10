@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.AnaTabControl = new System.Windows.Forms.TabControl();
             this.AnaSayfa = new System.Windows.Forms.TabPage();
             this.anaSayfaPaneli = new System.Windows.Forms.Panel();
@@ -186,6 +186,7 @@
             this.AnaTabControl.Controls.Add(this.cariler);
             this.AnaTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.AnaTabControl.Font = new System.Drawing.Font("Montserrat SemiBold", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AnaTabControl.HotTrack = true;
             this.AnaTabControl.ItemSize = new System.Drawing.Size(150, 70);
             this.AnaTabControl.Location = new System.Drawing.Point(0, 0);
             this.AnaTabControl.Margin = new System.Windows.Forms.Padding(2);
@@ -201,6 +202,7 @@
             // 
             // AnaSayfa
             // 
+            this.AnaSayfa.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.AnaSayfa.Controls.Add(this.anaSayfaPaneli);
             this.AnaSayfa.Location = new System.Drawing.Point(4, 74);
             this.AnaSayfa.Margin = new System.Windows.Forms.Padding(2);
@@ -217,7 +219,7 @@
             this.anaSayfaPaneli.Location = new System.Drawing.Point(0, 0);
             this.anaSayfaPaneli.Margin = new System.Windows.Forms.Padding(2);
             this.anaSayfaPaneli.Name = "anaSayfaPaneli";
-            this.anaSayfaPaneli.Size = new System.Drawing.Size(1676, 871);
+            this.anaSayfaPaneli.Size = new System.Drawing.Size(1674, 869);
             this.anaSayfaPaneli.TabIndex = 0;
             this.anaSayfaPaneli.MouseHover += new System.EventHandler(this.cariler_Leave);
             // 
@@ -286,15 +288,15 @@
             // 
             this.uretimemridata.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.uretimemridata.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Montserrat Medium", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle5.NullValue = "-";
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.uretimemridata.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Montserrat Medium", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.NullValue = "-";
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.uretimemridata.DefaultCellStyle = dataGridViewCellStyle3;
             this.uretimemridata.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uretimemridata.Location = new System.Drawing.Point(2, 2);
             this.uretimemridata.Margin = new System.Windows.Forms.Padding(2);
@@ -407,15 +409,15 @@
             // 
             this.rotadata.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.rotadata.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Montserrat Medium", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle6.NullValue = "boş";
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.rotadata.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Montserrat Medium", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.NullValue = "boş";
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.rotadata.DefaultCellStyle = dataGridViewCellStyle4;
             this.rotadata.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rotadata.Location = new System.Drawing.Point(0, 0);
             this.rotadata.Margin = new System.Windows.Forms.Padding(2);
