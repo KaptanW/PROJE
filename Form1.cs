@@ -53,7 +53,7 @@ namespace ERP_PROJESİ
                 Ana anaa = new Ana(userId);
 
                 this.Hide();
-
+                anaa.Form1 = this;
                 anaa.Show();
             }
             else

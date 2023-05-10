@@ -21,7 +21,6 @@ namespace ERP_PROJESİ
     public partial class EklemeEkranı : Form
     {
         public int selectedid { get; set; }
-        public string baslamatarihi;
         ComboBox gizlicombo = new ComboBox();
         SqlConnection SqlCon = new SqlConnection(@"Data Source=DESKTOP-PRMBC7J; initial Catalog = ERP; Integrated Security = True");
         
@@ -32,6 +31,7 @@ namespace ERP_PROJESİ
         public List<RadioButton> radioButtons = new List<RadioButton>();
         public List<DateTimePicker> DateTimePicks = new List<DateTimePicker>();   
         public List<CheckBox> CheckBoxes = new List<CheckBox>();
+        public string baslangictarihi { get; set; }
 
         public string SatinmiSatismi { get; set; }
         public string selectedPage { get; set; }
@@ -51,7 +51,6 @@ namespace ERP_PROJESİ
         {
             InitializeComponent();
             this.selectedPage = selectedPage;
-            MessageBox.Show(baslamatarihi);
         }
 
         public void EklemeEkranı_Load(object sender, EventArgs e)
@@ -954,6 +953,9 @@ namespace ERP_PROJESİ
                 case "rotalar":
                     rotagüncelle();
                     break;
+                case "satınalmairsaliyeleri":
+
+                    break;
                 default:
                     break;
             }
@@ -1006,6 +1008,7 @@ namespace ERP_PROJESİ
             List<UretimEmriDetay> list3 = SqlCon.Query<UretimEmriDetay>("select * from Uretim_Emri_Hammadde_Detay urd inner join Urun_Tablosu u on u.urunID = urd.urunID  where urd.sil = 'True' and uretimemriID = "+selectedid+"", SqlCon).ToList<UretimEmriDetay>();
             detaytablosu[0].DataSource = list3;
             detaytablosu[0].Columns[0].Visible = false;
+            detaytablosu[0].Columns[1].Visible = false;
             detaytablosu[0].Columns[4].Visible = false;
             if (SqlCon.State == ConnectionState.Open)
             {
@@ -1029,7 +1032,16 @@ namespace ERP_PROJESİ
                 param.Add("@detayid", detayselectedid);
                 param.Add("@id", selectedid);
                 param.Add("@urunid", int.Parse(ComboBoxes[2].SelectedValue.ToString()));
+            try
+            {
+
                 param.Add("@urunmiktar", int.Parse(textBoxes[2].Text));
+            }
+            catch (Exception)
+            {
+
+                MessageBox.Show("Hammadde Miktarı Girilmedi.");
+            }
                 SqlCon.Execute("UretimiemridetayDuzenleekle", param, commandType: CommandType.StoredProcedure);
                 üretimemriuruncombo();
                 detayselectedid = 0;
@@ -1045,17 +1057,24 @@ namespace ERP_PROJESİ
             {
                 SqlCon.Open();
             }
-            MessageBox.Show(timer);
             DynamicParameters param = new DynamicParameters();
             param.Add("@id",selectedid);
 
-            if (radioButtons[0].Checked == true)
+            if (baslangictarihi == "" && radioButtons[0].Checked == true)
             {
                 param.Add("@bitistarihi", null);
                 param.Add("@baslangictarihi", timer);
             }
             
-             else if (radioButtons[1].Checked == true)
+             else if (radioButtons[1].Checked == true && baslangictarihi != "")
+            {
+
+                param.Add("@bitistarihi", timer);
+
+                param.Add("@baslangictarihi", baslangictarihi);
+            }
+
+            else if (radioButtons[1].Checked == true)
             {
 
                 param.Add("@bitistarihi", timer);
@@ -1067,8 +1086,16 @@ namespace ERP_PROJESİ
                 param.Add("@baslangictarihi", null);
                 param.Add("@bitistarihi", null);
             }
+            try
+            {
 
-            param.Add("@siparisid", int.Parse(textBoxes[0].Text));
+                param.Add("@siparisid", int.Parse(textBoxes[0].Text));
+            }
+            catch (Exception)
+            {
+
+                MessageBox.Show("Sipariş ID Girilmedi");
+            }
             param.Add("@cikanurunid", ComboBoxes[0].SelectedValue);
             param.Add("@rotaid", ComboBoxes[1].SelectedValue);
           

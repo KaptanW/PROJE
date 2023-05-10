@@ -16,7 +16,7 @@ namespace ERP_PROJESİ.Classes.İmalat
         public string bitistarihi { get; set; }
         public string planlananbaslangıctarihi { get; set; }
         public int siparisID { get; set; }
-        public string ID { get; set; }
+        public string cıkanurunID { get; set; }
         public int rotaID { get; set; }
         public string uretimindurumu { get; set; }
         public bool sil { get; set; }
