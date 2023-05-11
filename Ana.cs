@@ -22,25 +22,35 @@ namespace ERP_PROJESİ
     
     public partial class Ana : Form
     {
-
+        //SQL bağlantısı.
         SqlConnection SqlCon = new SqlConnection(@"Data Source=DESKTOP-PRMBC7J; initial Catalog = ERP; Integrated Security = True");
+
+
+        //sayfalarda hangi sayfada oluduğumuzu belirtmek için selectedpage diye bir string atadım. ve her sayfa geçişlerinde bu değere göre switch
+        //caselerde ve ekleme sayfasında değişiklikler olucak ve ona göre methodlar çağıralacak
         public string selectedPage { get; set; }
+        //İrsaliye,Fatura ve siparis sayfalarının satış mı yada satın alma mı olduğunu tuttuğum string değerim
         public string SatinmiSatismi { get; set; }
         public int selectedid { get; set; }
 
+        //arama sayfasına göndereceğim string
         public string arama;
-
+        //urunun turune göre urun sayfalarında işime yarayan bir string
         public string urunturu;
-
+        //login ekranından çağırdığım calisanid'si bu değeri bazı listelere ekleme yapacağım zaman kullanacağım. 
         public int calisanID;
-
+        //üretim emri için gerekli olan bir string
         public string baslangıctarihi = "";
-
+        //logout yaparken application exit yapmaması için kullandığım bir boolean
         bool applicationexit = false;
 
+        ///giriş sayfası ile ana sayfa arasında kuracağım bağlantı için ekledim form1 i. ctor aracılığı ile login sayfasına erişimim olucak
         public Form1 Form1 { get; set; }
 
         List<uretimemirleri> uretimemirlerilist = new List<uretimemirleri>();
+
+
+        //creator method'ta calisanID çağırmamın sebebi belirli listelerde hangi çalışanın işlem yaptığını görmek istediğimden. User sayfasındaki UserID ile atama yapıyorum
         public Ana(int calisanID)
         {
             InitializeComponent();
@@ -63,6 +73,7 @@ namespace ERP_PROJESİ
         }
         #region form load
 
+        //Anaload methodunda programın kozmatik kısımlarını çağırıyorum ve sağ üst taraftaki saat göstergesinin çalışma methodunu başlatıyor 
         public void Ana_Load(object sender, EventArgs e)
         {
             timer1.Start();
@@ -105,6 +116,9 @@ namespace ERP_PROJESİ
             #endregion
         }
         #endregion
+
+
+        //Form sayfası kapanırken yaşanacak problemler için yazdığım bir method. fakat applicationexit diye bir boolean koydum onun durumuna göre logout yapılınca programı kapatmasını engelliyorum.
         #region app closing
 
         //bug yaşanmasın diye formu kapatıyor
@@ -117,6 +131,7 @@ namespace ERP_PROJESİ
             }
         }
         #endregion
+        //Tab geçişleri bölümünde yukarda belirttiğim gibi, her sayfaya geldiğimde arka planda tutucalacak bir selectedpage stringinin bulunmasını istedim. dinamik ekleme sayfası buna göre getirilecek.
         #region tab geçişleri
         #region ana sayfa
         private void AnaTabControl_Leave(object sender, EventArgs e)
@@ -405,8 +420,12 @@ namespace ERP_PROJESİ
         #endregion
 
         #endregion
+        //Programın efektifliğini artırması için eklenilen ekleme fonksiyonları. Ekleme, Çıkarma ve arama fonksiyonlarını içerir
         #region işlevler (ekleme-çıkarma-arama)
-
+        //bu regionda ekleme ekranının açılma methodunu oluşturdum. ekleme ekranı 3 şekilde geliyor 
+        //1. sağ click yapılıp ekle denildiğinde
+        //2.Aşağıdaki ekleme buttonuna basıldığında
+        //3. ve son olarak çift tıklanıldığında. fakat çift tıklanılınca gelen ekranın kodları burda değil alt kısımlarda güncelleme ekranında bulunuyor.
         #region Ekleme Ekranı
         private void ekle_Click(object sender, EventArgs e)
         {
@@ -468,6 +487,10 @@ namespace ERP_PROJESİ
 
         #endregion
         #endregion
+        //find ekranıda her sayfa için oluşturulmuş bitane arama ekranı yaratır. bu fonksiyonuda 3 farklı çeşitte çağırabiliriz.
+        //1. Sağ click ara ya basarak
+        //2. Arama buttonuna basarak
+        //3. Ctrl + F yaparak ekrana getirilebilir
         #region find ekranı
         //find ekranını açar
         private void AnaTabControl_KeyDown(object sender, KeyEventArgs e)
@@ -500,6 +523,9 @@ namespace ERP_PROJESİ
             find.ShowDialog();
         }
         #endregion
+        //listelerin tekrardan yenilenmesi için yazdığım methodlar. selectedpage stringine göre o sayfanın listeleme methodunu çağırarak, sayfadaki listeyi yeniler. 2 şekilde çalışır
+        //1. sağ click yenile
+        //2. aşağıdaki yenile buttonuna basarak
         #region Yenileme
 
         public void refresh_Click(object sender, EventArgs e)
@@ -567,6 +593,7 @@ namespace ERP_PROJESİ
             }
         }
         #endregion
+        //Sağ yukardaki saatin çalışmasını sağlayan method
         #region Saat
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -575,6 +602,7 @@ namespace ERP_PROJESİ
             label2.Text = DateTime.Now.ToLongTimeString();
         }
         #endregion
+        //logout methodu. applicationexit booleanı bulunur ve bulunduğunuz ana formu kapatır fakat kapatirken programı kapatmaması için booleanda değişiklik yapar
         #region çıkış
         private void cikis_Click(object sender, EventArgs e)
         {
@@ -587,7 +615,9 @@ namespace ERP_PROJESİ
         }
         #endregion
         #endregion
+        //Sayfalardaki tabloların sql bağlantılarını yazdığım region. burdaki methodlar sqldeki verileri çekmek için yazıldı ve tab geçiş regionda her sayfa açıldığında o sayfanın tablosunun yenilenmesi üzerine yukarda çağırıldı
         #region SQL Listeleme
+        
         #region İmalat
         #region Üretim Emri
         public void UretimEmriListesi()
@@ -664,7 +694,7 @@ namespace ERP_PROJESİ
         #endregion
 
         #endregion
-
+        //İmalat tamam
         #region Muhasebe
         #region Hakedişler
         public void HakedislerListesi()
@@ -742,7 +772,7 @@ namespace ERP_PROJESİ
         }
         #endregion
         #endregion
-
+        //Muhasebe tamam
         #region URUN
         #region urunler
         int tur;
@@ -866,7 +896,7 @@ namespace ERP_PROJESİ
         #endregion
         #endregion
         #endregion
-
+        //Urunler tamam
         #region Satış
         #region Satış siparisleri
         public void satissiparisleriListesi()
@@ -880,7 +910,7 @@ namespace ERP_PROJESİ
         }
         #endregion
         #endregion
-
+        //Satış tamam
         #region Satın Alma
         public void satinalmasiparislerilisetele()
         {
@@ -897,8 +927,7 @@ namespace ERP_PROJESİ
             satinalmasiparisdatası.Columns[6].Visible = false;
         }
         #endregion
-
-
+        //Satın Alma tamam
         #region Personeller
         public void personelListele()
         {
@@ -943,6 +972,7 @@ namespace ERP_PROJESİ
 
         //Cariler tamam
         #endregion
+        //Tablolardaki verileri güncellemek için oluşturduğum methodlar. bu methodları tablolardaki satırlara çift tıklayarak, ilgili satırı ekleme sayfasında çağırır ve güncellemesini gerçekleştirir
         #region güncelleme ekranı
         #region imalat
         #region uretimemri
@@ -1076,6 +1106,7 @@ namespace ERP_PROJESİ
         }
         #endregion
         #endregion
+        //imalat tamam
         #region Urun
         #region ticari urun double
 
@@ -1213,6 +1244,7 @@ namespace ERP_PROJESİ
         #endregion
         #endregion
         #endregion
+        //Urunler tamam
         #region Personeller
 
         private void personeldata_DoubleClick(object sender, EventArgs e)
@@ -1243,6 +1275,7 @@ namespace ERP_PROJESİ
             ekleekran.ShowDialog();
         }
         #endregion
+        //Personeller tamam
         #region Cariler
 
         private void carihesapdata_DoubleClick(object sender, EventArgs e)
@@ -1267,8 +1300,10 @@ namespace ERP_PROJESİ
             ekleekran.ShowDialog();
         }
         #endregion
+        //Cariler tamam
 
 
+        //sağ click update methodu fakat suan tam olarak güncel ve çalışır değil elden geçirilecek
         private void update_Click(object sender, EventArgs e)
         {
             EklemeEkranı ekleekran = new EklemeEkranı(this);
@@ -1328,6 +1363,12 @@ namespace ERP_PROJESİ
 
 
         #endregion
+        //Sayfalardaki listelerdeki satırları silmeye yarayan silme methodları. SQL de yazdığım silme procedurelarını burda çağırıyorum ve satırlarda bulunan sil bit değerini truedan falseye çeviriyorum.
+        //False değeri olan değerler listelerde gözükmeyecek şekilde ayarlandı.
+        //Herhangi bir veri kaybı yaşanmaması için bu yola başvuruldu. ilerde ilgili kişi silinen verilere ulaşmak istediğinde sil bitini tekrardan true yaparak veri geri getirilebilir.
+        //her silme için 2 tane method bulunmakta:
+        //1. satıra tıklanıldığında o satırın id numarısını selectedid integerinda tutma
+        //2. selectedidye göre o değerdeki veriyi silme
         #region silme
         #region İmalat
         #region Üretim Emri Sil
@@ -1392,6 +1433,7 @@ namespace ERP_PROJESİ
         #endregion
 
         #endregion
+        //İmalat tamam
         #region Ürünler
         #region ÜRÜNLERSİLME
         private void Ticaridata_Click(object sender, EventArgs e)
@@ -1465,6 +1507,7 @@ namespace ERP_PROJESİ
         #endregion
 
         #endregion
+        //Urunler tamam
         #region personeller
         private void personeldata_Click(object sender, EventArgs e)
         {
@@ -1480,6 +1523,7 @@ namespace ERP_PROJESİ
 
         }
         #endregion
+        //Personeller tamam
         #region Cariler
 
         private void carihesapdata_Click(object sender, EventArgs e)
@@ -1494,6 +1538,10 @@ namespace ERP_PROJESİ
             SqlCon.Execute("Carisil", param, commandType: CommandType.StoredProcedure);
         }
         #endregion
+        //Cariler tamam
+
+        //selectedpage ile hangi sayfada işlem yapıcağımızı bir switch case ile ayarladım. fakat silmeden önce bir message.box ile silmek istiyor musunuz uyarısını ayarladım, seçime göre veri silinebilir yada vazgeçilebilir.
+        //bu methodu aşağıdaki silme, sağ click silme yada delete tuşu ile gerçekleştirebilirsiniz.
         #region silme düğmesi
         public void delete_Click(object sender, EventArgs e)
         
@@ -1561,7 +1609,7 @@ namespace ERP_PROJESİ
         }
 
         #endregion
-
+        //silmeye üşendiğim bazı methodlar
         #region boş
 
         private void satinaidedata_CellContentClick(object sender, DataGridViewCellEventArgs e)

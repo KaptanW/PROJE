@@ -14,7 +14,7 @@ namespace ERP_PROJESİ
 {
     public partial class Form1 : Form
     {
-
+        //kullanıcı için kullanacağım classım
         class _kullanıcı
         {
             public int id { get; set; }
@@ -22,8 +22,9 @@ namespace ERP_PROJESİ
             public string parola { get; set; }
             public int ünvan { get; set; }
         }
-
+        //ana forma göndermek için yazdığım calisanid
         public string calisanid;
+        //SQL bağlantısı
         SqlConnection SqlCon = new SqlConnection(@"Data Source=DESKTOP-PRMBC7J; initial Catalog = ERP; Integrated Security = True");
 
         public Form1()
@@ -31,6 +32,7 @@ namespace ERP_PROJESİ
             InitializeComponent();
         }
 
+        //Login sayfasının dizaynının bir kısmını burada yapıyorum.
         private void Form1_Load(object sender, EventArgs e)
         {
             textBox2.PasswordChar = '*';
@@ -38,6 +40,7 @@ namespace ERP_PROJESİ
             panel2.BackColor = ColorTranslator.FromHtml("#626262");
         }
 
+        //giriş buttonu - burada textbox1 ve 2 deki değerleri username ve password olarak çekiyorum ve validateuser methodunda çağırıyorum.
         private void button1_Click(object sender, EventArgs e)
         {
 
@@ -49,7 +52,7 @@ namespace ERP_PROJESİ
             if (userId != default(int))
             {
                MessageBox.Show("Giriş başarılı. Kullanıcı kimliği: " + userId);
-                // TODO: Bir sonraki forma geçmek için kullanıcı kimliğini (UserId) kullanın.
+                
                 Ana anaa = new Ana(userId);
 
                 this.Hide();
@@ -63,19 +66,19 @@ namespace ERP_PROJESİ
 
 
         }
-
+        //Kapandıktan sonra yaşanabilcek problemler için bir applicationexit komutu çağırıyorum
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             Application.Exit();
         }
-
+        //kod ekranına gelebilmek için ana sayfada çift tıkladığımda gelen komut. hızlı bir şekilde kod sayfasına gelmemi sağladı (üşendim)
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
         }
 
         
-
+        //İlk login methodum. Yeni olan daha işlevsel olduğundan onu kullanıyorum.
             public void Login(string username, string password)
         {
             bool kullanıcı = false;
@@ -119,7 +122,7 @@ namespace ERP_PROJESİ
             reader.Close();
 
         }
-
+        //güncel giriş methodu. Sqldeki Kullanıcılar tablosundan kullaniciadi ve parola değerlerini eşleştiriyor.
         private int ValidateUser(string username, string password)
         {
             using (SqlCon)

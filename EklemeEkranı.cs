@@ -23,20 +23,22 @@ namespace ERP_PROJESİ
         public int selectedid { get; set; }
         ComboBox gizlicombo = new ComboBox();
         SqlConnection SqlCon = new SqlConnection(@"Data Source=DESKTOP-PRMBC7J; initial Catalog = ERP; Integrated Security = True");
-        
+        //Bu sayfadaki elementleri dinamik olarak çağırdığım için elementler load ekranında oluşuyor fakat oluşan elementler local bir method'ta oluştuğu için bunları globale taşımam gerekiyordu. onun için her element için bir
+        //list collection oluşturdum ve bu listelerde tuttum ve çağırdım
         #region listler classlar için
-        #endregion
         public List<TextBox> textBoxes = new List<TextBox>();
         public List<ComboBox> ComboBoxes = new List<ComboBox>(); 
         public List<RadioButton> radioButtons = new List<RadioButton>();
         public List<DateTimePicker> DateTimePicks = new List<DateTimePicker>();   
         public List<CheckBox> CheckBoxes = new List<CheckBox>();
+        public List<DataGridView> detaytablosu = new List<DataGridView>();
+        public List<Button> buttons = new List<Button>();
+        #endregion
         public string baslangictarihi { get; set; }
 
         public string SatinmiSatismi { get; set; }
         public string selectedPage { get; set; }
-        public List<DataGridView> detaytablosu = new List<DataGridView>();
-        public List<Button> buttons = new List<Button>();
+        //selected page değerine göre üst taraftaki giriş yazısını değiştirdim. bunun için aşağıdaki string değerini kullandım.
         string giriskelimesi;
         public string timer;
         Ana ana = new Ana();
@@ -52,7 +54,7 @@ namespace ERP_PROJESİ
             InitializeComponent();
             this.selectedPage = selectedPage;
         }
-
+        //ana formdaki her liste için farklı bir sayfa oluşturuyor ve oluşan elementleri yukarda belirttiğim listelere atıyorum ayrıca sayfalarda oluşan elementlerin methodlarını da burda atıyorum.
         public void EklemeEkranı_Load(object sender, EventArgs e)
         {
 
@@ -906,7 +908,7 @@ namespace ERP_PROJESİ
             }
             try
             {
-
+                //detay tablosu gerektiren bazı sayfalar var ve yeni oluşan datagridviewe gerekli olan bir method fakat normal sayfaları açtığımda hata veriyordu o yüzden try catch fonksiyonu içine aldım
                 detaytablosu[0].AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             }
             catch (Exception)
@@ -926,7 +928,7 @@ namespace ERP_PROJESİ
             Controls.Add(ad);
             ad.Click += new EventHandler(ekle);
         }
-
+        //aşağıda yazdığımekleme ve güncelleme methodlarını çağırdığım ekleme buttonu
         void ekle(object sender, EventArgs e)
         {
             switch (selectedPage)
@@ -966,13 +968,13 @@ namespace ERP_PROJESİ
             ana.refresh_Click(this,null);
         }
 
-
+        //ekran kapanırken sayfada yenileme yapar.
         public void EklemeEkranı_FormClosing(object sender, FormClosingEventArgs e)
         {
             ana.refresh_Click(this,null);
         }
 
-
+        //güncelleme ve ekleme için oluşturduğum methodlar
         #region EklemeDüzenleme Methodları
         #region imalat
         #region üretim emirleri sayfası

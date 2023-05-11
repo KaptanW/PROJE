@@ -25,7 +25,7 @@ namespace ERP_PROJESİ
             InitializeComponent();
         }
 
-        //aşağıdaki komut find ekranını kapatır
+        //aşağıdaki komut esc ile find ekranını kapatır
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
@@ -34,7 +34,7 @@ namespace ERP_PROJESİ
 
             }
         }
-
+        //arama ekranı geldiğinde textboxa yazılan her hafte olan sayfayı tekrardan günceller. seri bir şekilde istenilen sonuca ulaşılır
         private void aramatxt_TextChanged(object sender, EventArgs e)
         {
             Ana.arama = aramatxt.Text;
