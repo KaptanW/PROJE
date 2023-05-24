@@ -7,13 +7,13 @@ using System.Windows.Forms;
 
 namespace ERP_PROJESİ.Classes.Muhasebe
 {
-    internal class satınalımfaturaları
+    internal class fatura
     {
         public int faturaID { get; set; }
         public int CariID { get; set; }
-        public int siparisID { get; set; }
-        public DateTime tarih { get; set; }
-        public decimal tutar { get; set; }
+
+        public string faturatarihi { get; set; }
+        public float Tutar { get; set; }
         public string odemebilgisi { get; set; }
         public bool iade { get; set; }
         public bool sil { get; set;}

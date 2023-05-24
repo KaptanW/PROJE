@@ -15,11 +15,17 @@ using ERP_PROJESİ.Classes.Satış;
 using ERP_PROJESİ.Classes.Ürünler;
 using System.Collections;
 using System.Reflection;
+using ERP_PROJESİ.Classes.Muhasebe;
 
 namespace ERP_PROJESİ
 {
     public partial class EklemeEkranı : Form
     {
+        //Ekleme ekranı ebatı için değişkenler
+        int width, height;
+
+        bool oldubitti = false;
+        bool verionayı = true;
         public int selectedid { get; set; }
         ComboBox gizlicombo = new ComboBox();
         SqlConnection SqlCon = new SqlConnection(@"Data Source=DESKTOP-PRMBC7J; initial Catalog = ERP; Integrated Security = True");
@@ -46,7 +52,8 @@ namespace ERP_PROJESİ
         public EklemeEkranı(Ana ana)
         {
             InitializeComponent();
-            this.ana = ana; 
+            this.ana = ana;
+
         }
 
         public EklemeEkranı(string selectedPage)
@@ -57,9 +64,10 @@ namespace ERP_PROJESİ
         //ana formdaki her liste için farklı bir sayfa oluşturuyor ve oluşan elementleri yukarda belirttiğim listelere atıyorum ayrıca sayfalarda oluşan elementlerin methodlarını da burda atıyorum.
         public void EklemeEkranı_Load(object sender, EventArgs e)
         {
-
+            this.Font = new System.Drawing.Font("Montserrat SemiBold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.Text = selectedPage;
             BackColor = ColorTranslator.FromHtml("#eeeeee");
+            if(oldubitti == false)
             switch (selectedPage)
             {
                 case "üretimemri":
@@ -128,8 +136,6 @@ namespace ERP_PROJESİ
                     Controls.Add(adettxt);
                     textBoxes.Add(adettxt);
                     DataGridView hammadelistesi = new DataGridView();
-                    hammadelistesi.Location = new Point(520,50);
-                    hammadelistesi.Size = new Size(200,250);
                     hammadelistesi.Location = new Point(520, 50);
                     hammadelistesi.Size = new Size(350, 280);
                     detaytablosu.Add(hammadelistesi);
@@ -142,7 +148,7 @@ namespace ERP_PROJESİ
                     Controls.Add(basladibutton);
                     radioButtons.Add(basladibutton);
                     RadioButton bittibutton = new RadioButton();
-                    bittibutton.Text = "Başladı";
+                    bittibutton.Text = "Bitti";
                     bittibutton.Location = new Point(150, 350);
                     bittibutton.Size = new Size(100, 25);
                     Controls.Add(bittibutton);
@@ -154,7 +160,16 @@ namespace ERP_PROJESİ
                     ekle.Text = "Hammade ekle";
                     Controls.Add(ekle);
                     ekle.Click += new EventHandler(hammaddeekleduzenle);
+                    Button sil = new Button();
+                    sil.Location = new Point(650, 350);
+                    sil.Size = new Size(120, 75);
+                    buttons.Add(sil);
+                    sil.Text = "Hammade sil";
+                    Controls.Add(sil);
+                    sil.Click += new EventHandler(emirdetaysil);
                     üretimemriuruncombo();
+                    width = 900;
+                    height = 500;
                     #endregion
                     break;
                 case "makinalar":
@@ -198,10 +213,12 @@ namespace ERP_PROJESİ
                     Controls.Add(makinaacıklama);
                     TextBox makinaacıklamatxt = new TextBox();
                     makinaacıklamatxt.Location = new Point(250, 200);
-                    makinaacıklamatxt.Size = new Size(250, 100);
+                    makinaacıklamatxt.Size = new Size(250, 80);
                     makinaacıklamatxt.Multiline = true;
                     Controls.Add((makinaacıklamatxt));
                     textBoxes.Add(makinaacıklamatxt);
+                    width = 550;
+                    height = 450;
                     #endregion
                     break;
 
@@ -219,14 +236,14 @@ namespace ERP_PROJESİ
                     Controls.Add(RotaIDcombo);
                     ComboBoxes.Add(RotaIDcombo);
                     Button opekle = new Button();
-                    opekle.Location = new Point(520, 50);
-                    opekle.Size = new Size(200, 25);
+                    opekle.Location = new Point(520, 250);
+                    opekle.Size = new Size(120, 75);
                     opekle.Text = "Operasyon ekle";
                     Controls.Add(opekle);
                     opekle.Click += new EventHandler(rotadetayaekle);
                     DataGridView oplistesi = new DataGridView();
-                    oplistesi.Location = new Point(520, 80);
-                    oplistesi.Size = new Size(300, 150);
+                    oplistesi.Location = new Point(520, 50);
+                    oplistesi.Size = new Size(300, 180);
                     Controls.Add((oplistesi));
                     detaytablosu.Add(oplistesi);
                     oplistesi.Click += new EventHandler(opid);
@@ -244,11 +261,13 @@ namespace ERP_PROJESİ
                     rotadetaytablosu();
 
                     Button opsilme = new Button();
-                    opsilme.Location = new Point(520, 250);
-                    opsilme.Size = new Size(200, 25);
+                    opsilme.Location = new Point(650, 250);
+                    opsilme.Size = new Size(120, 75);
                     opsilme.Text = "Operasyon sil";
                     Controls.Add(opsilme);
                     opsilme.Click += new EventHandler(opsil);
+                    width = 900;
+                    height = 400;
                     #endregion
 
                     break;
@@ -309,14 +328,16 @@ namespace ERP_PROJESİ
                     giriskelimesi = "Operasyon";
                     Label operasyonadilbl = new Label();
                     operasyonadilbl.Text = "Operasyon Adi";
-                    operasyonadilbl.Location = new Point(50, 100);
+                    operasyonadilbl.Location = new Point(50, 60);
                     operasyonadilbl.Size = new Size(200, 50);
                     Controls.Add(operasyonadilbl);
                     TextBox operasyonadi = new TextBox();
-                    operasyonadi.Location = new Point(250, 100);
+                    operasyonadi.Location = new Point(250, 60);
                     operasyonadi.Size = new Size(250, 25);
                     Controls.Add(operasyonadi);
                     textBoxes.Add( operasyonadi );
+                    width = 550;
+                    height = 275;
                     break;
                 #endregion
                 case "personeller":
@@ -373,6 +394,9 @@ namespace ERP_PROJESİ
                     Controls.Add(ünvanID);
                     ComboBoxes.Add(ünvanID);
                     personelkombobox();
+
+                    width = 550;
+                    height = 450;
                     break;
                 #endregion
                 case "hakedis":
@@ -549,6 +573,8 @@ namespace ERP_PROJESİ
                     Controls.Add(caritürüRB1);
                     radioButtons.Add(caritürüRB1);
 
+                    width = 550;
+                    height = 505;
                     break;
                 #endregion
                     //ürünler ekleme düzenleme tamam - combobox çift olarak veriyor
@@ -632,6 +658,9 @@ namespace ERP_PROJESİ
                     Controls.Add(ürüntürüRD3);
                     urunlercombobox();
                     ürünkategorisiTXT.Text = "";
+
+                    width = 550;
+                    height = 510;
                     break;
                 #endregion 
                     //kategori ekleme tamam değiştirirken hata veriyor
@@ -659,6 +688,9 @@ namespace ERP_PROJESİ
                     kategoriacıklamaTXT.Multiline = true;
                     textBoxes.Add(kategoriacıklamaTXT); //2
                     Controls.Add(kategoriacıklamaTXT);
+
+                    width = 550;
+                    height = 350;
                     #endregion
                     break;
                 case "siparişler":
@@ -715,6 +747,8 @@ namespace ERP_PROJESİ
                     ekleBTN3.Size = new Size(75, 50);
                     Controls.Add(ekleBTN3);
 
+                    width = 900;
+                    height = 525;
 
                     #endregion
                     break;
@@ -803,20 +837,14 @@ namespace ERP_PROJESİ
                     buttons[1].Click += new EventHandler(irsaliyedetaysil);
                     irsaliyedetayılistele();
                     detaytablosu[0].Click += new EventHandler(irsaliyeid);
+
+                    width = 900;
+                    height = 510;
                     break;
                 #endregion
                 case "fatura":
                     #region Satın Alım Faturası
-                    giriskelimesi = "Satin Alım Faturası";
-                    Label siparisidLBL = new Label();
-                    siparisidLBL.Text = "Sipariş";
-                    siparisidLBL.Location = new Point(50, 50);
-                    siparisidLBL.Size = new Size(50, 25);
-                    Controls.Add(siparisidLBL);
-                    TextBox siparisidTXT = new TextBox();
-                    siparisidTXT.Location = new Point(250, 50);
-                    siparisidTXT.Size = new Size(250, 25);
-                    Controls.Add(siparisidTXT);
+                    giriskelimesi = "Fatura";
                     Label cariidLBL = new Label();
                     cariidLBL.Text = "Cari";
                     cariidLBL.Location = new Point(50, 75);
@@ -826,6 +854,7 @@ namespace ERP_PROJESİ
                     cariidTXT.Location = new Point(250, 75);
                     cariidTXT.Size = new Size(250, 25);
                     Controls.Add(cariidTXT);
+                    textBoxes.Add(cariidTXT);
                     Label tarihLBL = new Label();
                     tarihLBL.Text = "Tarih";
                     tarihLBL.Location = new Point(50, 100);
@@ -835,33 +864,37 @@ namespace ERP_PROJESİ
                     tarihDT.Location = new Point(250, 100);
                     tarihDT.Size = new Size(250, 25);
                     Controls.Add(tarihDT);
+                    DateTimePicks.Add(tarihDT);
                     Label tutarLBL = new Label();
                     tutarLBL.Text = "Tutar";
                     tutarLBL.Location = new Point(50, 125);
-                    tutarLBL.Size = new Size(50, 25);
+                    tutarLBL.Size = new Size(120, 25);
                     Controls.Add(tutarLBL);
                     TextBox tutarTXT = new TextBox();
                     tutarTXT.Location = new Point(250, 125);
                     tutarTXT.Size = new Size(250, 25);
                     Controls.Add(tutarTXT);
+                    textBoxes.Add(tutarTXT);
                     Label odemeLBL = new Label();
                     odemeLBL.Text = "Ödeme Bilgisi";
                     odemeLBL.Location = new Point(50, 150);
-                    odemeLBL.Size = new Size(50, 25);
+                    odemeLBL.Size = new Size(120, 25);
                     Controls.Add(odemeLBL);
                     TextBox odemeTXT = new TextBox();
                     odemeTXT.Location = new Point(250, 150);
                     odemeTXT.Size = new Size(250, 25);
                     Controls.Add(odemeTXT);
+                    textBoxes.Add(odemeTXT);
                     Label ürünıdLBL = new Label();
                     ürünıdLBL.Text = "Ürün ID'si";
                     ürünıdLBL.Location = new Point(50, 175);
                     ürünıdLBL.Size = new Size(175, 25);
                     Controls.Add(ürünıdLBL);
-                    TextBox ürünıdTXT = new TextBox();
+                    ComboBox ürünıdTXT = new ComboBox();
                     ürünıdTXT.Location = new Point(250, 175);
                     ürünıdTXT.Size = new Size(250, 25);
                     Controls.Add(ürünıdTXT);
+                    ComboBoxes.Add(ürünıdTXT );
                     Label ürünadetLBL = new Label();
                     ürünadetLBL.Text = "Ürün Adet";
                     ürünadetLBL.Location = new Point(50, 200);
@@ -871,6 +904,7 @@ namespace ERP_PROJESİ
                     ürünadetTXT.Location = new Point(250, 200);
                     ürünadetTXT.Size = new Size(250, 25);
                     Controls.Add(ürünadetTXT);
+                    textBoxes.Add(ürünadetTXT);
                     Label birimfiyatLBL = new Label();
                     birimfiyatLBL.Text = "Birim Fiyat";
                     birimfiyatLBL.Location = new Point(50, 225);
@@ -880,26 +914,37 @@ namespace ERP_PROJESİ
                     birimfiyatTXT.Location = new Point(250, 225);
                     birimfiyatTXT.Size = new Size(250, 25);
                     Controls.Add(birimfiyatTXT);
+                    textBoxes.Add(birimfiyatTXT);
                     DataGridView dataDGW = new DataGridView();
                     dataDGW.Location = new Point(515, 50);
                     dataDGW.Size = new Size(350, 300);
                     detaytablosu.Add(dataDGW);
                     Controls.Add(dataDGW);
+                    detaytablosu.Add(dataDGW);
+                    detaytablosu[0].Click += new EventHandler(faturadetayid);
                     Button ekleBTN = new Button();
                     ekleBTN.Text = "EKLE";
                     ekleBTN.Location = new Point(575, 375);
                     ekleBTN.Size = new Size(75, 50);
                     Controls.Add(ekleBTN);
+                    buttons.Add(ekleBTN);
+                    buttons[0].Click += faturadetayekleme;
                     Button ekleBTN1 = new Button();
                     ekleBTN1.Text = "ÇIKAR";
                     ekleBTN1.Location = new Point(750, 375);
                     ekleBTN1.Size = new Size(75, 50);
                     Controls.Add(ekleBTN1);
+                    buttons.Add(ekleBTN1);
+                    buttons[1].Click += new EventHandler(faturadetaysil);
                     CheckBox iadeCH = new CheckBox();
                     iadeCH.Location = new Point(250, 250);
                     iadeCH.Size = new Size(100, 50);
                     iadeCH.Text = "İade";
                     Controls.Add(iadeCH);
+                    CheckBoxes.Add(iadeCH);
+                    faturadetaylistele();
+                    width = 900;
+                    height = 525;
                     break;
                     #endregion
 
@@ -915,6 +960,7 @@ namespace ERP_PROJESİ
             {
 
             }
+            this.Size = new Size(width, height);
             Label giriş = new Label();
             giriş.Text = " " + (giriskelimesi) + " bilgilerini giriniz";
             giriş.Location = new Point(250, 25);
@@ -922,11 +968,12 @@ namespace ERP_PROJESİ
             giriş.Size = new Size(500, 100);
             Controls.Add(giriş);
             Button ad = new Button();
-            ad.Location = new Point(250, 350);
+            ad.Location = new Point(250, (height-150));
             ad.Size = new Size(120, 75);
             ad.Text = "Ekle";
             Controls.Add(ad);
             ad.Click += new EventHandler(ekle);
+            oldubitti = true;
         }
         //aşağıda yazdığımekleme ve güncelleme methodlarını çağırdığım ekleme buttonu
         void ekle(object sender, EventArgs e)
@@ -960,11 +1007,15 @@ namespace ERP_PROJESİ
                 case "satınalmairsaliyeleri":
                     irsaliyegenelekleme();
                     break;
+                case "fatura":
+                    faturaekleme();
+                    break;
                 default:
                     break;
             }
-
+            if(verionayı == true)
             MessageBox.Show("Veri Girildi");
+            verionayı = true;
             ana.refresh_Click(this,null);
         }
 
@@ -1056,6 +1107,7 @@ namespace ERP_PROJESİ
         #region üretim emri ekleme button
         public void uretimemriduzenle()
         {
+            verionayı = false;
 
             if (SqlCon.State == ConnectionState.Closed)
             {
@@ -1064,13 +1116,13 @@ namespace ERP_PROJESİ
             DynamicParameters param = new DynamicParameters();
             param.Add("@id",selectedid);
 
-            if (baslangictarihi == "" && radioButtons[0].Checked == true)
+            if (baslangictarihi == null && radioButtons[0].Checked == true)
             {
                 param.Add("@bitistarihi", null);
                 param.Add("@baslangictarihi", timer);
             }
             
-             else if (radioButtons[1].Checked == true && baslangictarihi != "")
+             else if (radioButtons[1].Checked == true && baslangictarihi != null)
             {
 
                 param.Add("@bitistarihi", timer);
@@ -1083,7 +1135,7 @@ namespace ERP_PROJESİ
 
                 param.Add("@bitistarihi", timer);
 
-                param.Add("@baslangictarihi", null);
+                param.Add("@baslangictarihi", baslangictarihi);
             }
             else
             {
@@ -1099,20 +1151,40 @@ namespace ERP_PROJESİ
             {
 
                 MessageBox.Show("Sipariş ID Girilmedi");
+                return;
             }
             param.Add("@cikanurunid", ComboBoxes[0].SelectedValue);
             param.Add("@rotaid", ComboBoxes[1].SelectedValue);
+            param.Add("@planlanantarih", DateTimePicks[0].Value.ToString());
           
             if (radioButtons[0].Checked == true) param.Add("@uretimindurumu", "Başladı");
             else if (radioButtons[1].Checked == true) param.Add("@uretimindurumu", "Bitti");
             else param.Add("@uretimindurumu", "Başlamadı");
-
-            SqlCon.Execute("UretimEmriDuzenleme", param, commandType: CommandType.StoredProcedure);
+            try
+            {
+                verionayı = true; 
+                SqlCon.Execute("UretimEmriDuzenleme", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Girilen Veriler Hatalı.");
+                return;
+            }
 
             if (SqlCon.State == ConnectionState.Open)
             {
                 SqlCon.Close();
             }
+        }
+        #endregion
+        #region Üretim emri detay silme
+        public void emirdetaysil(object sender, EventArgs e)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@detayid", detayselectedid);
+            SqlCon.Execute("Uretimiemridetaysil", param, commandType: CommandType.StoredProcedure);
+            üretimemriuruncombo();
+            detayselectedid = 0;
         }
         #endregion
         #endregion
@@ -1250,6 +1322,167 @@ namespace ERP_PROJESİ
         }
         #endregion
         #endregion
+        #region Muhasebe
+        #region Faturalar
+        #region Faturaverileri
+        public void faturadetaylistele()
+        {
+            if (SatinmiSatismi == "Satış")
+            {
+                
+                List<Faturadetay> list = SqlCon.Query<Faturadetay>("select * from Satis_Faturasi_Detay where faturaID = " + selectedid + " and sil = 'True'", SqlCon).ToList<Faturadetay>();
+                detaytablosu[0].DataSource = list;
+                detaytablosu[0].Columns[0].Visible = false;
+                detaytablosu[0].Columns[1].Visible = false;
+                detaytablosu[0].Columns[5].Visible = false;
+            }
+            else if (SatinmiSatismi == "Satın")
+            {
+                List<Faturadetay> list = SqlCon.Query<Faturadetay>("select * from Satin_Alma_Faturalari_Detay where faturaID = " + selectedid + " and sil = 'True'", SqlCon).ToList<Faturadetay>();
+                detaytablosu[0].DataSource = list;
+                detaytablosu[0].Columns[0].Visible = false;
+                detaytablosu[0].Columns[1].Visible = false;
+                detaytablosu[0].Columns[5].Visible = false;
+            }
+
+            List<ürünler> list3 = SqlCon.Query<ürünler>("select * from Urun_Tablosu where sil = 'True' and urunturu = 'Ticari'", SqlCon).ToList<ürünler>();
+            ComboBoxes[0].DataSource = list3;
+            ComboBoxes[0].DropDownStyle = ComboBoxStyle.DropDown;
+            ComboBoxes[0].DisplayMember = "urunadi";
+            ComboBoxes[0].ValueMember = "urunID";
+
+        }
+        #endregion
+        #region faturadetayidcekme
+        public void faturadetayid(object sender, EventArgs e)
+        {
+            detayselectedid = int.Parse(detaytablosu[0].CurrentRow.Cells[0].Value.ToString());
+
+            ComboBoxes[0].SelectedValue = int.Parse(detaytablosu[0].CurrentRow.Cells[2].Value.ToString());
+            textBoxes[4].Text = detaytablosu[0].CurrentRow.Cells[3].Value.ToString();
+            textBoxes[5].Text = detaytablosu[0].CurrentRow.Cells[4].Value.ToString();
+        }
+        #endregion
+        #region faturadetayekleme
+        public void faturadetayekleme(object sender, EventArgs e)
+        {
+
+            if (SqlCon.State == ConnectionState.Closed)
+            {
+                SqlCon.Open();
+            }
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@id", detayselectedid);
+            param.Add("@faturaID", selectedid);
+            param.Add("@urunid", int.Parse(ComboBoxes[0].SelectedValue.ToString()));
+            param.Add("@urunadet", int.Parse(textBoxes[3].Text));
+            param.Add("@birimfiyat", float.Parse(textBoxes[4].Text));
+            if (SatinmiSatismi == "Satın")
+            {
+                try
+                {
+
+                    SqlCon.Execute("SatinAlmaFaturaEkleDüzenle", param, commandType: CommandType.StoredProcedure);
+                   
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+            else if (SatinmiSatismi == "Satış")
+            {
+                try
+                {
+
+                    SqlCon.Execute("SatişFaturaEkleDüzenle", param, commandType: CommandType.StoredProcedure);
+                    
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+
+            if (SqlCon.State == ConnectionState.Open)
+            {
+                SqlCon.Close();
+            }
+
+            faturadetaylistele();
+        }
+        #endregion
+        #region faturadetaysilme
+        public void faturadetaysil(object sender, EventArgs e)
+        {
+
+
+                DynamicParameters param = new DynamicParameters();
+                param.Add("@id", detayselectedid);
+                if (SatinmiSatismi == "Satın")
+                {
+                    SqlCon.Execute("SatinAlmaFaturaDetaySilme", param, commandType: CommandType.StoredProcedure);
+                }
+                else if (SatinmiSatismi == "Satış")
+                {
+
+                    SqlCon.Execute("SatişAlmaFaturaDetaySilme", param, commandType: CommandType.StoredProcedure);
+                }
+
+                if (SqlCon.State == ConnectionState.Open)
+                {
+                    SqlCon.Close();
+                }
+
+                faturadetaylistele();
+            
+        }
+
+        #endregion
+        #region Faturaekleme
+        public void faturaekleme()
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@id", selectedid);
+            param.Add("@cariid", int.Parse(textBoxes[0].Text));
+            param.Add("@faturatarihi", DateTimePicks[0].Value.ToString());
+            param.Add("@tutar", float.Parse(textBoxes[1].Text));
+            param.Add("@ödemebilgisi", textBoxes[2].Text); 
+            if (CheckBoxes[0].Checked == true)
+                param.Add("@iade", true);
+            else param.Add("@iade", false);
+            if (SatinmiSatismi == "Satın")
+            {
+                try
+                {
+
+                    SqlCon.Execute("SatinAlmaFaturaGenelEkleDüzenle", param, commandType: CommandType.StoredProcedure);
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+            else if (SatinmiSatismi == "Satış")
+            {
+
+                try
+                {
+                    SqlCon.Execute("SatişAlmaFaturaGenelEkleDüzenle", param, commandType: CommandType.StoredProcedure);
+                }
+                catch (Exception)
+                {
+
+                }
+
+            }
+        }
+
+        #endregion
+        #endregion
+        #endregion
         #region urunler tab control
         #region urunler
 
@@ -1361,19 +1594,19 @@ namespace ERP_PROJESİ
 
             if(SatinmiSatismi == "Satış")
             {
-                List<Satışsipariş> list2 = SqlCon.Query<Satışsipariş>("select * from Urun_Tablosu where sil = 'True' and urunturu = 'Ticari'", SqlCon).ToList<Satışsipariş>();
+                List<Satışsipariş> list2 = SqlCon.Query<Satışsipariş>("select * from Satis_Siparisleri where sil = 'True'", SqlCon).ToList<Satışsipariş>();
                 ComboBoxes[1].DataSource = list2;
                 ComboBoxes[1].DropDownStyle = ComboBoxStyle.DropDown;
-                ComboBoxes[1].DisplayMember = "gidenSiparisID";
-                ComboBoxes[1].ValueMember = "gidenSiparisID";
+                ComboBoxes[1].DisplayMember = "SiparisID";
+                ComboBoxes[1].ValueMember = "SiparisID";
             }
             else if (SatinmiSatismi == "Satın")
             {
                 List<Satinalmasiparisleri> list2 = SqlCon.Query<Satinalmasiparisleri>("select * from Satin_Alma_Siparişleri where sil = 'True'", SqlCon).ToList<Satinalmasiparisleri>();
                 ComboBoxes[1].DataSource = list2;
                 ComboBoxes[1].DropDownStyle = ComboBoxStyle.DropDown;
-                ComboBoxes[1].DisplayMember = "satinalmaSiparisID";
-                ComboBoxes[1].ValueMember = "satinalmaSiparisID";
+                ComboBoxes[1].DisplayMember = "SiparisID";
+                ComboBoxes[1].ValueMember = "SiparisID";
             }
             
 
@@ -1406,7 +1639,6 @@ namespace ERP_PROJESİ
             param.Add("@irsaliyeid", selectedid);
             param.Add("@urunid", int.Parse(ComboBoxes[2].SelectedValue.ToString()));
             param.Add("@urunadet", int.Parse(textBoxes[0].Text));
-            param.Add("@id", detayselectedid);
             if(SatinmiSatismi == "Satın")
             {
                 SqlCon.Execute("SatinAlmaİrsaliyeEkleDüzenle", param, commandType: CommandType.StoredProcedure);
@@ -1463,12 +1695,28 @@ namespace ERP_PROJESİ
             else param.Add("@iade", false);
             if (SatinmiSatismi == "Satın")
             {
-                SqlCon.Execute("SatinAlmaİrsaliyeGenelEkleDüzenle", param, commandType: CommandType.StoredProcedure);
+                try
+                {
+
+                    SqlCon.Execute("SatinAlmaİrsaliyeGenelEkleDüzenle", param, commandType: CommandType.StoredProcedure);
+                }
+                catch (Exception)
+                {
+                    
+                }
             }
             else if (SatinmiSatismi == "Satış")
             {
 
-                SqlCon.Execute("SatisAlmaİrsaliyeGenelEkleDüzenle", param, commandType: CommandType.StoredProcedure);
+                try
+                {
+                    SqlCon.Execute("SatisAlmaİrsaliyeGenelEkleDüzenle", param, commandType: CommandType.StoredProcedure);
+                }
+                catch (Exception)
+                {
+
+                }
+                
             }
 
             if (SqlCon.State == ConnectionState.Open)
@@ -1568,6 +1816,21 @@ namespace ERP_PROJESİ
             }
         }
         #endregion
+        //esc ile kapanmasını sağlar
+        private void EklemeEkranı_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                this.Close();
+
+            }
+        }
+
+        private void EklemeEkranı_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+        }
+
         private void EklemeEkranı_FormClosed(object sender, FormClosedEventArgs e)
         {
 

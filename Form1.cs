@@ -36,8 +36,6 @@ namespace ERP_PROJESİ
         private void Form1_Load(object sender, EventArgs e)
         {
             textBox2.PasswordChar = '*';
-            panel1.BackColor = ColorTranslator.FromHtml("#626262");
-            panel2.BackColor = ColorTranslator.FromHtml("#626262");
         }
 
         //giriş buttonu - burada textbox1 ve 2 deki değerleri username ve password olarak çekiyorum ve validateuser methodunda çağırıyorum.
@@ -51,7 +49,6 @@ namespace ERP_PROJESİ
             int userId = ValidateUser(username, password);
             if (userId != default(int))
             {
-               MessageBox.Show("Giriş başarılı. Kullanıcı kimliği: " + userId);
                 
                 Ana anaa = new Ana(userId);
 
@@ -125,13 +122,11 @@ namespace ERP_PROJESİ
         //güncel giriş methodu. Sqldeki Kullanıcılar tablosundan kullaniciadi ve parola değerlerini eşleştiriyor.
         private int ValidateUser(string username, string password)
         {
-            using (SqlCon)
-            {
+
                 string sql = "SELECT UserId FROM kullanicilar_ WHERE kullaniciadi = @kullanici AND parola = @parola";
                 int userId = SqlCon.QuerySingleOrDefault<int>(sql, new { kullanici = username, parola = password });
 
                 return userId;
-            }
         }
 
         private void btnLogin_Click(object sender, EventArgs e)

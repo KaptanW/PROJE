@@ -34,14 +34,17 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1169, 553);
+            this.ClientSize = new System.Drawing.Size(882, 553);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "EklemeEkranı";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "EklemeEkranı";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EklemeEkranı_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.EklemeEkranı_FormClosed);
             this.Load += new System.EventHandler(this.EklemeEkranı_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.EklemeEkranı_KeyDown);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.EklemeEkranı_KeyPress);
             this.ResumeLayout(false);
 
         }

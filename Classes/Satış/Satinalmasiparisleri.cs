@@ -8,11 +8,10 @@ namespace ERP_PROJESİ.Classes
 {
     internal class Satinalmasiparisleri
     {
-        public int satinalmaSiparisID { get; set; }
+        public int SiparisID { get; set; }
         public string CariAdi { get; set; }
-        public int Calısanid { get; set; }
         public string siparistarihi { get; set; }
-        public int totaltutar { get; set; }
+        public float totaltutar { get; set; }
         public string gönderilenkargofirması { get; set; }
         public bool sil { get; set; }
     }

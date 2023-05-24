@@ -79,8 +79,11 @@ namespace ERP_PROJESİ
                 case "satisalımiade":
                     Ana.SatınAlımİadeListele();
                     break;
-                case "satisfaturalari":
+                case "fatura":
+                    Ana.SatınAlımFaturalarıListele();
+                    Ana.SatınAlımİadeListele();
                     Ana.SatışFaturalarıListele();
+                    Ana.SatışİadeListele();
                     break;
                 case "satisiade":
                     Ana.SatışİadeListele();
