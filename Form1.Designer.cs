@@ -168,6 +168,7 @@
             this.kayıtbutonu.TabIndex = 5;
             this.kayıtbutonu.Text = "Kayıt";
             this.kayıtbutonu.UseVisualStyleBackColor = true;
+            this.kayıtbutonu.Click += new System.EventHandler(this.kayıtbutonu_Click);
             // 
             // Form1
             // 

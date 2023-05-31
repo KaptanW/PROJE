@@ -21,7 +21,10 @@ namespace ERP_PROJESİ
             public string kullaniciadi { get; set; }
             public string parola { get; set; }
             public int ünvan { get; set; }
+
         }
+
+        public int UserID { get; set; }
         //ana forma göndermek için yazdığım calisanid
         public string calisanid;
         //SQL bağlantısı
@@ -41,16 +44,12 @@ namespace ERP_PROJESİ
         //giriş buttonu - burada textbox1 ve 2 deki değerleri username ve password olarak çekiyorum ve validateuser methodunda çağırıyorum.
         private void button1_Click(object sender, EventArgs e)
         {
+            ValidateUser();
 
-
-            string username = textBox1.Text;
-            string password = textBox2.Text;
-
-            int userId = ValidateUser(username, password);
-            if (userId != default(int))
+            if (UserID != default(int))
             {
                 
-                Ana anaa = new Ana(userId);
+                Ana anaa = new Ana(UserID);
 
                 this.Hide();
                 anaa.Form1 = this;
@@ -62,6 +61,23 @@ namespace ERP_PROJESİ
             }
 
 
+        }
+
+        private void kayıtbutonu_Click(object sender, EventArgs e)
+        {
+            string username = textBox1.Text;
+            string password = textBox2.Text;
+            ValidateUser();
+            if(ValidateAdmin(username, password) == 3)
+            {
+                EklemeEkranı eklemeEkranı = new EklemeEkranı("kayıtekranı");
+                eklemeEkranı.ShowDialog();
+
+            }
+            else
+            {
+                MessageBox.Show("Sadece admin kayıt yapabilir.");
+            }
         }
         //Kapandıktan sonra yaşanabilcek problemler için bir applicationexit komutu çağırıyorum
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -120,15 +136,23 @@ namespace ERP_PROJESİ
 
         }
         //güncel giriş methodu. Sqldeki Kullanıcılar tablosundan kullaniciadi ve parola değerlerini eşleştiriyor.
-        private int ValidateUser(string username, string password)
+        private void ValidateUser()
         {
 
                 string sql = "SELECT UserId FROM kullanicilar_ WHERE kullaniciadi = @kullanici AND parola = @parola";
-                int userId = SqlCon.QuerySingleOrDefault<int>(sql, new { kullanici = username, parola = password });
+                UserID = SqlCon.QuerySingleOrDefault<int>(sql, new { kullanici = textBox1.Text, parola = textBox2.Text });
 
-                return userId;
+                
         }
 
+        private int ValidateAdmin(string username, string password)
+        {
+
+            string sql = "SELECT ünvanID FROM Calisanlar_ WHERE calisanid = @UserId";
+            int Admin = SqlCon.QuerySingleOrDefault<int>(sql, new { UserID });
+
+            return Admin;
+        }
         private void btnLogin_Click(object sender, EventArgs e)
         {
             
@@ -137,5 +161,7 @@ namespace ERP_PROJESİ
 
 
         #endregion
+
+
     }
 }

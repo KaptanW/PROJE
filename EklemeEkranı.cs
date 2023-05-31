@@ -61,6 +61,7 @@ namespace ERP_PROJESİ
             InitializeComponent();
             this.selectedPage = selectedPage;
         }
+        
         //ana formdaki her liste için farklı bir sayfa oluşturuyor ve oluşan elementleri yukarda belirttiğim listelere atıyorum ayrıca sayfalarda oluşan elementlerin methodlarını da burda atıyorum.
         public void EklemeEkranı_Load(object sender, EventArgs e)
         {
@@ -947,8 +948,34 @@ namespace ERP_PROJESİ
                     height = 525;
                     break;
                     #endregion
-
-                default:
+                    case "kayıtekranı":
+                        #region kayıtekranı
+                        giriskelimesi = "Kullanıcı";
+                        Label kullanıcılbl = new Label();
+                        kullanıcılbl.Text = "Kullanıcı Adı";
+                        kullanıcılbl.Location = new Point(50, 50);
+                        kullanıcılbl.Size = new Size(150, 25);
+                        Controls.Add(kullanıcılbl);
+                        TextBox kullanıcıTXT = new TextBox();
+                        kullanıcıTXT.Location = new Point(250, 50);
+                        kullanıcıTXT.Size = new Size(250, 25);
+                        textBoxes.Add(kullanıcıTXT); //1
+                        Controls.Add(kullanıcıTXT);
+                        Label ParolaLBL = new Label();
+                        ParolaLBL.Text = "Parola";
+                        ParolaLBL.Location = new Point(50, 75);
+                        ParolaLBL.Size = new Size(150, 25);
+                        Controls.Add(ParolaLBL);
+                        TextBox ParolaTXT = new TextBox();
+                        ParolaTXT.Location = new Point(250, 75);
+                        ParolaTXT.Size = new Size(250, 25);
+                        textBoxes.Add(ParolaTXT); //2
+                        Controls.Add(ParolaTXT);
+                        width = 550;
+                        height = 300;
+                        break;
+                    #endregion
+                    default:
                     break;
             }
             try

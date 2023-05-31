@@ -1180,16 +1180,66 @@ namespace ERP_PROJESİ
             ekleekran.Show();
             if (SatinmiSatismi == "Satış")
             {
+                try
+                {
 
-                ekleekran.textBoxes[0].Text = satisfaturalaridata.CurrentRow.Cells[1].Value.ToString();
-                ekleekran.textBoxes[1].Text = satisfaturalaridata.CurrentRow.Cells[3].Value.ToString();
-                ekleekran.textBoxes[2].Text = satisfaturalaridata.CurrentRow.Cells[4].Value.ToString();
+                    ekleekran.textBoxes[0].Text = satisfaturalaridata.CurrentRow.Cells[1].Value.ToString();
+                }
+                catch (Exception)
+                {
+
+                }
+                try
+                {
+
+                    ekleekran.textBoxes[1].Text = satisfaturalaridata.CurrentRow.Cells[3].Value.ToString();
+                }
+                catch (Exception)
+                {
+
+                }
+                try
+                {
+
+                    ekleekran.textBoxes[2].Text = satisfaturalaridata.CurrentRow.Cells[4].Value.ToString();
+                }
+                catch (Exception)
+                {
+
+                }
+
             }
             else if (SatinmiSatismi == "Satın")
             {
-                ekleekran.textBoxes[0].Text = satinalimfaturasidata.CurrentRow.Cells[1].Value.ToString();
-                ekleekran.textBoxes[1].Text = satinalimfaturasidata.CurrentRow.Cells[3].Value.ToString();
-                ekleekran.textBoxes[2].Text = satinalimfaturasidata.CurrentRow.Cells[4].Value.ToString();
+                try
+                {
+
+                }
+                catch (Exception)
+                {
+
+                    ekleekran.textBoxes[0].Text = satinalimfaturasidata.CurrentRow.Cells[1].Value.ToString();
+                }
+                try
+                {
+
+                }
+                catch (Exception)
+                {
+
+                    ekleekran.textBoxes[1].Text = satinalimfaturasidata.CurrentRow.Cells[3].Value.ToString();
+                }
+                try
+                {
+
+                    ekleekran.textBoxes[2].Text = satinalimfaturasidata.CurrentRow.Cells[4].Value.ToString();
+                }
+                catch (Exception)
+                {
+
+                }
+
+
             }
                 ekleekran.Visible = false;
             ekleekran.ShowDialog();
